@@ -1,0 +1,3802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Parcial IV Periodo - Química 6° | Prof. Cristian David Ayazo</title>
+
+  <!-- CDN Principal + Respaldo automático con onerror para jsPDF (con soporte de cifrado PDF) -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+    onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';"
+  ></script>
+
+  <!-- CDN Principal + Respaldo automático para QRious (generación directa en Canvas) -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"
+    onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js';"
+  ></script>
+
+  <!-- CDN Principal + Respaldo automático con onerror para QRCode.js -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+    onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js';"
+  ></script>
+
+  <style>
+    :root {
+      --primary: #081b38;
+      --primary-light: #153866;
+      --accent: #c89d28;
+      --accent-bright: #e5bd43;
+      --accent-soft: #fcf6e5;
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --warning: #b45309;
+      --warning-bg: #fef3c7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --shadow: 0 12px 28px -6px rgba(8, 27, 56, 0.14), 0 4px 12px -2px rgba(8, 27, 56, 0.08);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    textarea, input[type="text"], input[type="password"] {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(21, 56, 102, 0.05) 0%, transparent 28%),
+        radial-gradient(circle at 88% 82%, rgba(200, 157, 40, 0.07) 0%, transparent 30%);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ENCABEZADO Y BANNER INSTITUCIONAL */
+    .institutional-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-bottom: 4px solid var(--accent);
+      padding: 12px 16px;
+      box-shadow: 0 4px 14px rgba(8, 27, 56, 0.2);
+    }
+
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .banner-frame {
+      width: 100%;
+      background: #ffffff;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    #institutional-banner-img {
+      width: 100%;
+      max-height: 170px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .sub-header-pills {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 2px 4px;
+    }
+
+    .sub-header-title {
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .exam-meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .meta-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(229, 189, 67, 0.45);
+      padding: 3px 11px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fef08a;
+    }
+
+    /* BARRA DE MONITOREO EN VIVO */
+    .monitoring-bar {
+      background: #ffffff;
+      border-bottom: 2px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 3px 10px rgba(8, 27, 56, 0.07);
+    }
+
+    .monitoring-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 10px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .status-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .timer-global {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .timer-global.urgent {
+      background: var(--danger);
+      border-color: var(--danger);
+      animation: pulseAlert 1.2s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .mic-meter-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .mic-bar-track {
+      width: 96px;
+      height: 11px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mic-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #16a34a;
+      transition: width 0.1s linear, background-color 0.15s ease;
+    }
+
+    .mic-threshold-mark {
+      position: absolute;
+      left: 70%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--danger);
+    }
+
+    .btn-teacher-top {
+      background: #fff1f2;
+      color: #9f1239;
+      border: 1.5px solid #fecdd3;
+      padding: 6px 13px;
+      border-radius: 9px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      line-height: 1.15;
+      transition: all 0.2s;
+    }
+
+    .btn-teacher-top:hover {
+      background: #ffe4e6;
+      border-color: #fda4af;
+    }
+
+    .btn-teacher-top span.sub {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #be123c;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .main-container {
+      max-width: 1020px;
+      width: 100%;
+      margin: 22px auto;
+      padding: 0 16px 40px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid #dbe3ee;
+      border-top: 5px solid var(--primary);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* TARJETAS VISUALES TEMÁTICAS DE QUÍMICA 6° */
+    .thematic-showcase {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .theme-visual-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1.5px solid #cbd5e1;
+      border-top: 4px solid var(--primary-light);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 3px 10px rgba(8, 27, 56, 0.05);
+    }
+
+    .theme-visual-icon {
+      width: 66px;
+      height: 66px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      border: 1.5px solid #e9c96b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .theme-visual-text h4 {
+      font-size: 0.92rem;
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .theme-visual-text p {
+      font-size: 0.79rem;
+      color: var(--muted);
+      line-height: 1.38;
+    }
+
+    /* LÁMINA ILUSTRADA DE CONTEXTO POR PREGUNTA */
+    .context-illustration-card {
+      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      box-shadow: inset 0 1px 4px rgba(8, 27, 56, 0.04);
+    }
+
+    .context-illustration-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 6px;
+    }
+
+    .context-illustration-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .context-illustration-sub {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #1e40af;
+      background: #dbeafe;
+      padding: 2px 9px;
+      border-radius: 999px;
+    }
+
+    .context-illustration-svg-wrap {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #dbe3ee;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .context-illustration-svg-wrap svg {
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      max-height: 165px;
+      display: block;
+    }
+
+    /* PANTALLA DE BIENVENIDA */
+    .welcome-title {
+      font-size: 1.4rem;
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .teacher-credit-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      border: 1.5px solid var(--accent);
+      color: var(--primary);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .welcome-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .rule-item {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .rule-item strong {
+      display: block;
+      color: var(--primary);
+      margin-bottom: 4px;
+      font-size: 0.89rem;
+    }
+
+    .resume-alert {
+      background: var(--warning-bg);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .form-single-box {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+    }
+
+    .form-single-box label {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #ffffff;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(21, 56, 102, 0.12);
+    }
+
+    .form-control.valid {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    .name-validation-hint {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--warning);
+    }
+
+    .name-validation-hint.ok {
+      color: var(--success);
+    }
+
+    .mic-setup-panel {
+      background: #f8fafc;
+      border: 1.5px dashed var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mic-setup-panel.ready {
+      border-style: solid;
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .banner-loader-row {
+      background: var(--accent-soft);
+      border: 1px solid #f3d98b;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #5c4508;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .start-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 8px;
+    }
+
+    .start-readiness-hint {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      background: #b0871e;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #ffffff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #ffffff;
+    }
+
+    /* PANTALLA DE PREGUNTAS */
+    .question-header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+
+    .badges-left {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-phase {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.79rem;
+      font-weight: 700;
+    }
+
+    .badge-topic {
+      background: var(--accent-soft);
+      color: #785407;
+      border: 1px solid #e9c96b;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.79rem;
+      font-weight: 700;
+    }
+
+    .badge-points {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .per-question-timer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .context-box {
+      background: #f8fafc;
+      border-left: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      font-size: 0.97rem;
+      line-height: 1.74;
+      color: #1e293b;
+      text-align: justify;
+    }
+
+    .question-stem {
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .option-card:hover {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background: #eff6ff;
+      box-shadow: 0 2px 8px rgba(8, 27, 56, 0.08);
+    }
+
+    .option-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      color: var(--primary);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.92rem;
+    }
+
+    .option-card.selected .option-letter {
+      background: var(--primary);
+      color: var(--accent-bright);
+    }
+
+    .option-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.5;
+      padding-top: 3px;
+    }
+
+    /* PREGUNTAS ABIERTAS */
+    .open-instructions {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      margin-bottom: 12px;
+    }
+
+    .open-textarea {
+      width: 100%;
+      min-height: 170px;
+      padding: 14px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 10px;
+    }
+
+    .open-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .open-counters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .counter-pill {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .counter-pill.ok {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .question-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .min-time-msg {
+      color: var(--warning);
+      background: var(--warning-bg);
+      border: 1px solid #fcd34d;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .min-time-msg.ready {
+      color: var(--success);
+      background: var(--success-bg);
+      border-color: #86efac;
+    }
+
+    /* PANTALLA DE RESULTADOS */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .stat-card .label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .stat-card .value {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat-card.final-grade-card {
+      background: var(--primary);
+      color: #ffffff;
+      border: 2px solid var(--accent);
+    }
+
+    .stat-card.final-grade-card .label {
+      color: #cbd5e1;
+    }
+
+    .stat-card.final-grade-card .value {
+      color: var(--accent-bright);
+      font-size: 1.75rem;
+    }
+
+    .qr-verification-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 24px;
+      background: #f8fafc;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin: 22px 0;
+    }
+
+    .qr-box {
+      background: #ffffff;
+      padding: 14px;
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(8, 27, 56, 0.08);
+    }
+
+    #qr-display-img {
+      width: 220px;
+      height: 220px;
+      display: block;
+    }
+
+    .qr-info {
+      flex: 1;
+      min-width: 280px;
+      max-width: 520px;
+    }
+
+    .qr-info h3 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 6px;
+    }
+
+    .verification-hash-box {
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      font-weight: 800;
+      background: #ffffff;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      margin: 6px 0 10px;
+      letter-spacing: 1px;
+    }
+
+    .qr-report-preview {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.76rem;
+      line-height: 1.45;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+      border-left: 4px solid var(--accent);
+    }
+
+    .offscreen-qr-renderer {
+      position: fixed;
+      left: -9999px;
+      top: -9999px;
+      width: 320px;
+      height: 320px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* MODALES Y BLOQUEOS */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 27, 56, 0.86);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 26px;
+      box-shadow: 0 20px 35px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      border-top: 6px solid var(--primary);
+    }
+
+    .modal-card.danger {
+      border-top-color: var(--danger);
+    }
+
+    .modal-card h3 {
+      font-size: 1.22rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .modal-card p {
+      font-size: 0.94rem;
+      color: var(--text);
+      margin-bottom: 18px;
+    }
+
+    .disclaimer-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 18px;
+      }
+      .monitoring-inner {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ENCABEZADO CON EL BANNER INSTITUCIONAL INTEGRADO SIN DEFORMACIÓN -->
+  <header class="institutional-header">
+    <div class="header-inner">
+      <div class="banner-frame">
+        <img
+          id="institutional-banner-img"
+          alt="Banner Institucional Examen Parcial IV Periodo - 6° Grade Química - Gimnasio Cristiano Faro de Luz"
+        />
+      </div>
+      <div class="sub-header-pills">
+        <div class="sub-header-title">
+          GIMNASIO CRISTIANO FARO DE LUZ — DOCENTE: CRISTIAN DAVID AYAZO | CÓDIGO: F-GA2-004 · VERSIÓN: 2
+        </div>
+        <div class="exam-meta-pills">
+          <span class="meta-pill">Asignatura: QUÍMICA</span>
+          <span class="meta-pill">Grado: 6° (6° GRADE)</span>
+          <span class="meta-pill">Docente: Cristian David Ayazo</span>
+          <span class="meta-pill">Cerradas: 3.7 pts | Abiertas: 1.3 pts | Total: 5.0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA PERMANENTE DE MONITOREO EN DECIBELES (dB) Y ACCESO DOCENTE -->
+  <nav class="monitoring-bar" aria-label="Estado de la evaluación">
+    <div class="monitoring-inner">
+      <div class="status-group">
+        <div class="status-chip timer-global" id="global-timer-chip">
+          <span>⏱ Tiempo Total:</span>
+          <span id="global-timer-display">45:00</span>
+        </div>
+        <div class="status-chip">
+          <span>⚠️ Salidas de página:</span>
+          <span id="tab-switches-display">0 / 3</span>
+        </div>
+        <div class="status-chip">
+          <span>📉 Penalización acumulada:</span>
+          <span id="penalty-display">-0.0</span>
+        </div>
+        <div class="mic-meter-box" title="Medidor de nivel de ruido ambiental en decibeles (Umbral máximo permitido: 70 dB)">
+          <span>🎙️ Ruido:</span>
+          <div class="mic-bar-track">
+            <div class="mic-bar-fill" id="mic-meter-fill"></div>
+            <div class="mic-threshold-mark" title="Límite: 70 dB"></div>
+          </div>
+          <span id="mic-meter-text">0 dB</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-teacher-top" id="btn-teacher-finish">
+        <span>Finalizar examen</span>
+        <span class="sub">Uso exclusivo del docente</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="main-container">
+
+    <!-- PANTALLA 1: BIENVENIDA, ELEMENTOS TEMÁTICOS Y CONFIGURACIÓN -->
+    <section class="card" id="screen-welcome">
+      <h2 class="welcome-title">Examen Parcial - IV Periodo: Química (Grado 6°)</h2>
+      <div class="teacher-credit-banner">
+        👨‍🔬 Profesor de Química: <span>CRISTIAN DAVID AYAZO</span> &nbsp;|&nbsp; Periodo IV
+      </div>
+      <p class="welcome-subtitle">
+        Evaluación por competencias sobre <strong>Compuestos Orgánicos, Sustancias Puras y Mezclas Homogéneas y Heterogéneas</strong>. Revisa los ejes temáticos y la distribución de puntaje antes de iniciar:
+      </p>
+
+      <!-- TARJETAS CON ELEMENTOS VISUALES RELACIONADOS CON LA TEMÁTICA DE QUÍMICA 6° -->
+      <div class="thematic-showcase">
+        <div class="theme-visual-card">
+          <div class="theme-visual-icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+              <polygon points="22,12 36,20 36,36 22,44 8,36 8,20" stroke="#081b38" stroke-width="3" fill="#dbeafe"/>
+              <circle cx="22" cy="12" r="4.5" fill="#081b38"/>
+              <circle cx="36" cy="20" r="4.5" fill="#15803d"/>
+              <circle cx="36" cy="36" r="4.5" fill="#081b38"/>
+              <circle cx="22" cy="44" r="4.5" fill="#b45309"/>
+              <path d="M40,48 C40,34 56,26 58,14 C44,14 34,26 40,48 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+              <text x="17" y="32" font-size="11" font-weight="900" fill="#081b38">C</text>
+            </svg>
+          </div>
+          <div class="theme-visual-text">
+            <h4>1. Compuestos Orgánicos</h4>
+            <p>Estructuras con esqueleto de <strong>Carbono (C)</strong> unido a H, O y N, presentes en seres vivos, combustibles y polímeros.</p>
+          </div>
+        </div>
+
+        <div class="theme-visual-card">
+          <div class="theme-visual-icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+              <path d="M24,10 H40 M28,10 V24 L14,50 C12,53 14,56 18,56 H46 C50,56 52,53 50,50 L36,24 V10" stroke="#081b38" stroke-width="3" fill="#e0f2fe"/>
+              <path d="M18,44 H46 L50,51 C51,53 49,55 46,55 H18 C15,55 13,53 14,51 Z" fill="#38bdf8"/>
+              <circle cx="27" cy="48" r="3" fill="#ffffff"/>
+              <circle cx="37" cy="49" r="2.5" fill="#ffffff"/>
+              <circle cx="48" cy="18" r="5" fill="#ef4444"/>
+              <circle cx="41" cy="25" r="3.5" fill="#081b38"/>
+              <circle cx="55" cy="25" r="3.5" fill="#081b38"/>
+            </svg>
+          </div>
+          <div class="theme-visual-text">
+            <h4>2. Sustancias Puras y Mezclas</h4>
+            <p>Diferenciación entre <strong>elementos</strong> (Cu, O<sub>2</sub>), <strong>compuestos</strong> (H<sub>2</sub>O, NaCl) de fórmula fija y <strong>mezclas</strong>.</p>
+          </div>
+        </div>
+
+        <div class="theme-visual-card">
+          <div class="theme-visual-icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 64 64" fill="none">
+              <rect x="6" y="14" width="22" height="40" rx="3" stroke="#081b38" stroke-width="2.5" fill="#ffffff"/>
+              <rect x="8" y="26" width="18" height="26" fill="#60a5fa"/>
+              <rect x="36" y="14" width="22" height="40" rx="3" stroke="#081b38" stroke-width="2.5" fill="#ffffff"/>
+              <rect x="38" y="22" width="18" height="9" fill="#facc15"/>
+              <rect x="38" y="31" width="18" height="12" fill="#38bdf8"/>
+              <rect x="38" y="43" width="18" height="9" fill="#a16207"/>
+            </svg>
+          </div>
+          <div class="theme-visual-text">
+            <h4>3. Homogéneas y Heterogéneas</h4>
+            <p>Soluciones de <strong>una sola fase</strong> (soluto + solvente) frente a sistemas multifásicos y métodos de separación física.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta para reanudar examen en caso de recarga accidental -->
+      <div class="resume-alert hidden" id="resume-banner">
+        <div>
+          <strong style="color:#92400e;">Se detectó una evaluación activa guardada en este navegador.</strong>
+          <p style="font-size:0.86rem;color:#78350f;">
+            Puedes continuar exactamente desde la pregunta donde quedaste conservando tu tiempo transcurrido y tus respuestas.
+          </p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-accent" id="btn-resume-exam">Reanudar examen</button>
+        </div>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-item">
+          <strong>1. Distribución de Nota (5.0)</strong>
+          Las <strong>12 preguntas cerradas suman 3.7 puntos</strong> (0.31 / 0.30 pts c/u) y las <strong>3 preguntas abiertas suman 1.3 puntos</strong> (0.43 / 0.44 pts c/u) para un total de <strong>5.0</strong>.
+        </div>
+        <div class="rule-item">
+          <strong>2. Validación de Abiertas</strong>
+          Si respondes con al menos <strong>4 líneas significativas</strong> coherentes con lo que se pregunta, tu respuesta abierta se califica como <strong>CORRECTA</strong>.
+        </div>
+        <div class="rule-item">
+          <strong>3. Medidor en Decibeles (dB)</strong>
+          El micrófono mide el nivel en <strong>decibeles (dB)</strong>. Superar los <strong>70 dB</strong> durante ~1 segundo genera alerta y penalización de -0.1 puntos.
+        </div>
+        <div class="rule-item">
+          <strong>4. Tiempos y Supervisión</strong>
+          45 min en total (mín. 1 min por cerrada; máx. 5 min por abierta). Salir de la pestaña penaliza: 1.ª vez (-0.5), 2.ª vez (-1.0) y 3.ª vez finaliza el examen.
+        </div>
+      </div>
+
+      <!-- Opción para vincular el archivo de imagen original del banner si se desea -->
+      <div class="banner-loader-row">
+        <span>🖼️ <strong>Banner Institucional en Pantalla y PDF:</strong> El banner oficial ya está activo y se incrustará en la parte superior del PDF. Si deseas cargar un archivo de imagen desde tu equipo, selecciónalo aquí:</span>
+        <input type="file" id="banner-upload-input" accept="image/*" style="font-size:0.8rem;" />
+      </div>
+
+      <!-- ÚNICO CAMPO OBLIGATORIO: NOMBRE COMPLETO DEL ESTUDIANTE -->
+      <div class="form-single-box">
+        <label for="student-name">Nombre y Apellido Completo del Estudiante *</label>
+        <input
+          type="text"
+          id="student-name"
+          class="form-control"
+          placeholder="Escribe tu nombre y apellido completos (Ej. Mariana Sofía Hernández Rojas)"
+          autocomplete="name"
+        />
+        <span id="name-validation-msg" class="name-validation-hint">
+          ⚠️ Requisito obligatorio: Escribe tu nombre completo (mínimo un nombre y un apellido).
+        </span>
+      </div>
+
+      <!-- PANEL DE ACTIVACIÓN DEL MICRÓFONO -->
+      <div class="mic-setup-panel" id="mic-setup-box">
+        <div>
+          <strong style="color:var(--primary);display:block;">Activación obligatoria del sonómetro en Decibeles (dB)</strong>
+          <span id="welcome-mic-status" style="font-size:0.86rem;color:var(--danger);font-weight:600;">
+            Estado: Micrófono inactivo. Haz clic en el botón de la derecha para autorizar el micrófono.
+          </span>
+        </div>
+        <button type="button" class="btn btn-accent" id="btn-activate-mic">🎙️ Autorizar Micrófono (Medidor dB)</button>
+      </div>
+
+      <div class="start-action-row">
+        <span class="start-readiness-hint" id="start-readiness-hint">
+          Completa tu nombre y autoriza el micrófono para habilitar el botón de inicio.
+        </span>
+        <button type="button" class="btn btn-primary" id="btn-start-exam" disabled>
+          Iniciar Evaluación en Pantalla Completa →
+        </button>
+      </div>
+
+      <p class="disclaimer-note">
+        Nota técnica: Durante el examen se bloquean funciones de copiado, pegado, cortar, arrastrar texto, menú contextual y atajos de teclado para proteger la integridad de la prueba, aunque ninguna medida en navegador hace imposible inspeccionar el código fuente. El sonómetro expresa en decibeles (dB) la amplitud relativa captada por el micrófono del dispositivo.
+      </p>
+    </section>
+
+    <!-- PANTALLA 2: DESARROLLO DEL EXAMEN -->
+    <section class="card hidden" id="screen-exam">
+      <div class="question-header-bar">
+        <div class="badges-left">
+          <span class="badge-phase" id="phase-badge">Parte I: Selección Múltiple</span>
+          <span class="badge-topic" id="question-topic-badge">Tema</span>
+          <span class="badge-points" id="question-points-badge">Valor: 0.31 pts</span>
+          <strong id="question-counter" style="color:var(--primary);font-size:0.95rem;">Pregunta 1 de 12</strong>
+        </div>
+
+        <div class="per-question-timer" id="question-timer-box">
+          <span id="question-timer-label">⏳ Permanencia mínima:</span>
+          <span id="question-timer-display">01:00</span>
+        </div>
+      </div>
+
+      <!-- IMAGEN / LÁMINA CIENTÍFICA ESPECÍFICA QUE ENRIQUECE EL CONTEXTO DE CADA PREGUNTA -->
+      <div class="context-illustration-card" id="question-visual-aid">
+        <div class="context-illustration-header">
+          <span class="context-illustration-title" id="question-visual-title">🔬 Figura de apoyo experimental</span>
+          <span class="context-illustration-sub" id="question-visual-sub">Prof. Cristian David Ayazo</span>
+        </div>
+        <div class="context-illustration-svg-wrap" id="question-visual-svg"></div>
+      </div>
+
+      <div class="context-box" id="question-context"></div>
+      <div class="question-stem" id="question-stem"></div>
+
+      <!-- Contenedor de opciones para preguntas cerradas (1 a 12) -->
+      <div class="options-list" id="options-container"></div>
+
+      <!-- Contenedor de respuesta para preguntas abiertas (13 a 15) -->
+      <div class="hidden" id="open-answer-container">
+        <div class="open-instructions">
+          <strong>Instrucción para pregunta abierta:</strong> Escribe una respuesta de <strong>al menos 4 líneas significativas</strong> que sea coherente con lo que se pregunta. Cada línea significativa debe tener al menos 5 palabras con sentido. Si cumples estas dos condiciones (mínimo 4 líneas + coherencia con la pregunta), tu respuesta será calificada automáticamente como <strong>CORRECTA</strong> obteniendo la totalidad de los puntos de la pregunta.
+        </div>
+        <textarea
+          id="open-textarea"
+          class="open-textarea"
+          placeholder="Escribe aquí tu respuesta coherente de al menos 4 líneas significativas (puedes separar tus ideas con Enter, punto seguido o redactar un párrafo completo de al menos 20-25 palabras relacionadas con la pregunta)..."
+        ></textarea>
+        <div class="open-counters">
+          <span class="counter-pill" id="sig-lines-count">Líneas significativas: 0 / 4</span>
+          <span class="counter-pill" id="words-count">Palabras totales: 0</span>
+          <span class="counter-pill" id="coherence-badge">Coherencia temática: Pendiente</span>
+          <span id="open-validation-msg" style="color:var(--warning);">Escribe al menos 4 líneas significativas coherentes con la pregunta.</span>
+        </div>
+      </div>
+
+      <div class="question-footer">
+        <div class="min-time-msg" id="min-time-warning">
+          Debes completar el tiempo mínimo antes de continuar
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-next-question" disabled>
+          Siguiente pregunta →
+        </button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: RESULTADOS FINALES Y VERIFICACIÓN QR -->
+    <section class="card hidden" id="screen-results">
+      <h2 class="welcome-title">Resultados del Examen Parcial — Química 6° Grado</h2>
+      <p class="welcome-subtitle" id="res-subtitle-info">
+        Informe oficial de evaluación por competencias — Docente: <strong>Cristian David Ayazo</strong> (Código: F-GA2-004 · Versión: 2).
+      </p>
+
+      <div style="background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:16px;">
+        <p><strong>Nombre completo del estudiante:</strong> <span id="res-student-name" style="font-weight:700;color:var(--primary);"></span></p>
+        <p><strong>Docente titular de Química:</strong> <span style="font-weight:700;color:var(--primary-light);">Cristian David Ayazo</span></p>
+        <p><strong>Motivo de finalización:</strong> <span id="res-finish-reason" style="font-weight:700;color:var(--primary);"></span></p>
+      </div>
+
+      <div class="results-grid">
+        <div class="stat-card">
+          <div class="label">Correctas Selección Múltiple</div>
+          <div class="value" id="res-correct-count">0 / 12</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Puntaje Selección Múltiple (Máx 3.70)</div>
+          <div class="value" id="res-closed-score">0.00 / 3.70</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Puntaje Preguntas Abiertas (Máx 1.30)*</div>
+          <div class="value" id="res-open-score">0.00 / 1.30</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Penalización Cambio Pestaña</div>
+          <div class="value" style="color:var(--danger);" id="res-tab-penalty">-0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Penalización por Ruido (&gt;70 dB)</div>
+          <div class="value" style="color:var(--danger);" id="res-noise-penalty">-0.00</div>
+        </div>
+        <div class="stat-card final-grade-card">
+          <div class="label">Nota Final del Estudiante (0.0 - 5.0)</div>
+          <div class="value" id="res-final-grade">0.00</div>
+        </div>
+      </div>
+
+      <p class="disclaimer-note">
+        *Nota pedagógica: La sumatoria de las 12 preguntas cerradas equivale a <strong>3.70 puntos</strong> y las 3 preguntas abiertas equivalen a <strong>1.30 puntos</strong> (Total = <strong>5.00</strong>). Las respuestas abiertas con al menos 4 líneas significativas coherentes con lo preguntado se califican como <strong>CORRECTAS</strong> dentro de esta valoración automática aproximada. El nivel de ruido se midió en decibeles (dB) estimados sobre la amplitud relativa del micrófono.
+      </p>
+
+      <!-- SECCIÓN QR DE VERIFICACIÓN CON REPORTE COMPLETO -->
+      <div class="qr-verification-section">
+        <div class="qr-box">
+          <img id="qr-display-img" alt="Código QR de verificación con informe completo" />
+          <span style="font-size:0.75rem;color:var(--muted);margin-top:6px;font-weight:700;">Escanea con la cámara para ver el informe</span>
+        </div>
+        <div class="qr-info">
+          <h3>Código QR de verificación</h3>
+          <p style="font-size:0.88rem;color:var(--muted);">
+            Al escanear este código QR desde cualquier celular o lector óptico se muestra directamente el <strong>Informe Completo de Evaluación</strong> con la nota del estudiante (idéntico al insertado en el PDF):
+          </p>
+          <div class="verification-hash-box" id="verification-code-text">VERIF-000000</div>
+          <div class="qr-report-preview" id="qr-report-preview-box"></div>
+          <div>
+            <button type="button" class="btn btn-primary" id="btn-download-pdf">
+              📥 Descargar Informe PDF (Con Nota, Banner y QR)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Renderizador QR fuera de pantalla pero activo en el DOM -->
+  <div id="qr-temp-holder" class="offscreen-qr-renderer"></div>
+
+  <!-- MODAL 1: BLOQUEO POR SALIDA DE PANTALLA COMPLETA -->
+  <div class="modal-backdrop hidden" id="modal-fullscreen">
+    <div class="modal-card danger">
+      <h3>🔒 Pantalla Completa Requerida</h3>
+      <p style="font-weight:700;font-size:1.05rem;color:var(--danger);">
+        La evaluación debe permanecer en pantalla completa
+      </p>
+      <p>
+        Para continuar presentando tu examen parcial de Química de 6° grado, haz clic en el botón inferior para regresar al modo de pantalla completa.
+      </p>
+      <button type="button" class="btn btn-primary" id="btn-return-fullscreen">
+        Volver a pantalla completa
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: BLOQUEO POR DESACTIVACIÓN DE MICRÓFONO -->
+  <div class="modal-backdrop hidden" id="modal-mic-lost">
+    <div class="modal-card danger">
+      <h3>🎙️ Micrófono Desactivado o Sin Acceso</h3>
+      <p>
+        El micrófono debe permanecer activo midiendo los decibeles (dB) durante toda la evaluación. Se ha bloqueado temporalmente el examen hasta que restablezcas el micrófono.
+      </p>
+      <button type="button" class="btn btn-accent" id="btn-restore-mic">
+        Reactivar micrófono
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADVERTENCIAS GENERALES (CAMBIO DE PESTAÑA / RUIDO dB / TIEMPO ABIERTA) -->
+  <div class="modal-backdrop hidden" id="modal-alert">
+    <div class="modal-card danger">
+      <h3 id="modal-alert-title">⚠️ Advertencia de Supervisión</h3>
+      <p id="modal-alert-body"></p>
+      <button type="button" class="btn btn-primary" id="btn-close-alert">Entendido</button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: USO EXCLUSIVO DEL DOCENTE -->
+  <div class="modal-backdrop hidden" id="modal-teacher">
+    <div class="modal-card">
+      <h3>🔐 Finalizar examen — Uso exclusivo del docente</h3>
+      <p>
+        Profesor <strong>Cristian David Ayazo</strong>: Ingrese la contraseña docente para finalizar inmediatamente la evaluación, calcular la nota con el avance actual y descargar el PDF.
+      </p>
+      <div class="form-group" style="text-align:left;margin-bottom:14px;">
+        <label for="teacher-password-input">Contraseña docente</label>
+        <input type="password" id="teacher-password-input" class="form-control" placeholder="Ingrese la contraseña..." />
+        <p id="teacher-error-msg" class="hidden" style="color:var(--danger);font-weight:700;font-size:0.86rem;margin-top:6px;">
+          Contraseña incorrecta
+        </p>
+      </div>
+      <div style="display:flex;justify-content:center;gap:10px;">
+        <button type="button" class="btn" style="background:#e2e8f0;color:#1e293b;" id="btn-cancel-teacher">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btn-confirm-teacher">Finalizar Evaluación</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*************************************************************************
+     * CONFIGURACIÓN CENTRALIZADA DE LA EVALUACIÓN (GRADO 6° - QUÍMICA)
+     * Sumatoria Preguntas Cerradas = 3.70 | Sumatoria Preguntas Abiertas = 1.30
+     * Nota Máxima Total = 5.00
+     *************************************************************************/
+    const CONFIG = {
+      institution: "GIMNASIO CRISTIANO FARO DE LUZ",
+      institutionSub: "MANANTIAL DE DIOS - THE LIGHTHOUSE SCHOOL (CÓDIGO: F-GA2-004 | VERSIÓN: 2)",
+      teacherName: "CRISTIAN DAVID AYAZO",
+      subject: "QUIMICA",
+      subjectDisplay: "QUÍMICA",
+      examName: "EXAMEN PARCIAL - IV PERIODO",
+      examTopics: "COMPUESTOS ORGÁNICOS, SUSTANCIAS PURAS Y MEZCLAS HOMOGÉNEAS Y HETEROGÉNEAS",
+      period: "4",
+      grade: "6",
+      totalTimeSeconds: 45 * 60,        // 45 minutos (2700 s)
+      minClosedTimeSeconds: 60,         // 1 minuto mínimo por pregunta cerrada
+      maxOpenTimeSeconds: 5 * 60,       // 5 minutos máximo por pregunta abierta
+      minSignificantLines: 4,           // Mínimo 4 líneas significativas para validar como correcta
+      minWordsPerLine: 5,               // Aproximadamente 5 palabras por línea significativa
+      scaleMin: 0.0,                    // Escala de calificación 0.0 a 5.0
+      scaleMax: 5.0,
+      closedWeight: 3.7,                // Sumatoria exacta de las 12 preguntas cerradas = 3.70
+      openWeight: 1.3,                  // Sumatoria exacta de las 3 preguntas abiertas = 1.30 (3.7 + 1.3 = 5.0)
+      passingGrade: 3.0,                // Nota mínima aprobatoria referencial
+      teacherPassword: "0323",          // Contraseña docente centralizada
+      pdfPassword: "0323",              // Contraseña del PDF centralizada
+      micThresholdDb: 70,               // Umbral de ruido en decibeles: 70 dB
+      micSustainMs: 1000,               // Duración aproximada: 1 segundo (1000 ms)
+      micCooldownMs: 5000,              // Periodo de enfriamiento (5 s)
+      micPenaltyValue: 0.1,             // Penalización por superar 70 dB: -0.1
+      tabPenalties: [0.5, 1.0],         // 1ra salida: -0.5, 2da salida: -1.0 adicional
+      storageKey: "GCFL_QUIMICA_G6_P4_STATE_V6",
+      bannerStorageKey: "GCFL_BANNER_G6_DATAURL_V6"
+    };
+
+    /*************************************************************************
+     * DIBUJO DEL BANNER INSTITUCIONAL EN CANVAS COMPATIBLE CON CUALQUIER NAVEGADOR
+     *************************************************************************/
+    let bannerForPdfJpeg = null;
+
+    function drawSafeRoundedRect(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + width - r, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+      ctx.lineTo(x + width, y + height - r);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+      ctx.lineTo(x + r, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function renderOfficialBannerCanvas() {
+      const c = document.createElement("canvas");
+      c.width = 1200;
+      c.height = 216;
+      const ctx = c.getContext("2d");
+
+      const bgGrad = ctx.createLinearGradient(0, 0, 1200, 0);
+      bgGrad.addColorStop(0, "#ffffff");
+      bgGrad.addColorStop(0.5, "#f1f5f9");
+      bgGrad.addColorStop(1, "#ffffff");
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1200, 216);
+
+      const goldGrad = ctx.createLinearGradient(0, 0, 1200, 216);
+      goldGrad.addColorStop(0, "#f6e27a");
+      goldGrad.addColorStop(0.5, "#c89d28");
+      goldGrad.addColorStop(1, "#9c7311");
+
+      const navyGrad = ctx.createLinearGradient(0, 0, 0, 216);
+      navyGrad.addColorStop(0, "#173766");
+      navyGrad.addColorStop(1, "#071630");
+
+      // Franjas diagonales izquierdas
+      ctx.fillStyle = goldGrad;
+      ctx.beginPath();
+      ctx.moveTo(315, 0); ctx.lineTo(336, 0); ctx.lineTo(266, 216); ctx.lineTo(245, 216);
+      ctx.closePath(); ctx.fill();
+
+      ctx.fillStyle = navyGrad;
+      ctx.beginPath();
+      ctx.moveTo(336, 0); ctx.lineTo(378, 0); ctx.lineTo(308, 216); ctx.lineTo(266, 216);
+      ctx.closePath(); ctx.fill();
+
+      // Franjas diagonales derechas
+      ctx.fillStyle = navyGrad;
+      ctx.beginPath();
+      ctx.moveTo(945, 0); ctx.lineTo(987, 0); ctx.lineTo(917, 216); ctx.lineTo(875, 216);
+      ctx.closePath(); ctx.fill();
+
+      ctx.fillStyle = goldGrad;
+      ctx.beginPath();
+      ctx.moveTo(987, 0); ctx.lineTo(1006, 0); ctx.lineTo(936, 216); ctx.lineTo(917, 216);
+      ctx.closePath(); ctx.fill();
+
+      // Logo Izquierdo: MANANTIAL DE DIOS ("M")
+      ctx.save();
+      ctx.translate(55, 28);
+      ctx.fillStyle = "#071630";
+      ctx.beginPath();
+      ctx.moveTo(15, 112); ctx.lineTo(15, 16); ctx.lineTo(65, 48); ctx.lineTo(115, 16);
+      ctx.lineTo(115, 112); ctx.lineTo(96, 112); ctx.lineTo(96, 50); ctx.lineTo(65, 70);
+      ctx.lineTo(34, 50); ctx.lineTo(34, 112); ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = "#071630";
+      ctx.lineWidth = 4.5;
+      ctx.beginPath();
+      ctx.moveTo(58, 88); ctx.quadraticCurveTo(72, 78, 86, 88); ctx.quadraticCurveTo(100, 98, 112, 88);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(58, 99); ctx.quadraticCurveTo(72, 89, 86, 99); ctx.quadraticCurveTo(100, 109, 112, 99);
+      ctx.stroke();
+
+      ctx.fillStyle = "#071630";
+      ctx.font = "bold 17px 'Segoe UI', Arial, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("MANANTIAL DE DIOS", 65, 152);
+      ctx.restore();
+
+      // Textos Centrales Oficiales
+      ctx.fillStyle = "#071630";
+      ctx.textAlign = "center";
+      ctx.font = "800 37px 'Segoe UI', Arial, sans-serif";
+      ctx.fillText("EXAMEN PARCIAL - IV PERIODO", 625, 64);
+      ctx.font = "800 39px 'Segoe UI', Arial, sans-serif";
+      ctx.fillText("6° GRADE", 625, 114);
+
+      // Cápsula Central Azul con Borde Dorado: QUÍMICA
+      ctx.fillStyle = navyGrad;
+      ctx.strokeStyle = goldGrad;
+      ctx.lineWidth = 5;
+      drawSafeRoundedRect(ctx, 445, 134, 360, 62, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 38px 'Segoe UI', Arial, sans-serif";
+      ctx.fillText("QUÍMICA", 625, 178);
+
+      // Escudo Derecho: THE LIGHTHOUSE SCHOOL + CÓDIGO F-GA2-004 VERSIÓN 2
+      ctx.save();
+      ctx.translate(1015, 12);
+      ctx.fillStyle = "#173766";
+      ctx.strokeStyle = "#071630";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(65, 6); ctx.lineTo(118, 30); ctx.lineTo(118, 90);
+      ctx.quadraticCurveTo(118, 130, 65, 152);
+      ctx.quadraticCurveTo(12, 130, 12, 90);
+      ctx.lineTo(12, 30); ctx.closePath();
+      ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#eab308";
+      ctx.beginPath();
+      ctx.moveTo(65, 10); ctx.lineTo(114, 32); ctx.lineTo(114, 90);
+      ctx.quadraticCurveTo(114, 126, 65, 147); ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(80, 36, 14, 42);
+      ctx.fillStyle = "#dc2626";
+      ctx.fillRect(80, 48, 14, 8);
+      ctx.fillRect(80, 64, 14, 8);
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.5;
+      ctx.fillRect(8, 76, 114, 24);
+      ctx.strokeRect(8, 76, 114, 24);
+      ctx.fillStyle = "#071630";
+      ctx.font = "bold 12px 'Segoe UI', Arial, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("THE LIGHTHOUSE", 65, 92);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 15px 'Segoe UI', Arial, sans-serif";
+      ctx.fillText("CÓDIGO: F-GA2-004", 65, 174);
+      ctx.fillText("VERSIÓN: 2", 65, 193);
+      ctx.restore();
+
+      return c.toDataURL("image/jpeg", 0.96);
+    }
+
+    /*************************************************************************
+     * BANCO DE 15 ILUSTRACIONES CIENTÍFICAS QUE ENRIQUECEN EL CONTEXTO
+     * (1 lámina ilustrada exclusiva por cada una de las 15 preguntas)
+     *************************************************************************/
+    const QUESTION_ILLUSTRATIONS = {
+      1: {
+        title: "Figura 1. Comparación molecular de las muestras recolectadas en el huerto escolar",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="8" width="320" height="124" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+          <text x="168" y="28" font-size="13" font-weight="800" fill="#166534" text-anchor="middle">TEJIDOS VIVOS (Hojas, Madera, Frutas)</text>
+          <path d="M45,95 C45,55 85,42 105,40 C100,75 80,100 45,95 Z" fill="#22c55e" stroke="#15803d" stroke-width="2.5"/>
+          <path d="M45,95 L88,55" stroke="#14532d" stroke-width="2"/>
+          <g transform="translate(135, 42)">
+            <line x1="20" y1="30" x2="60" y2="30" stroke="#081b38" stroke-width="3"/>
+            <line x1="60" y1="30" x2="100" y2="30" stroke="#081b38" stroke-width="3"/>
+            <line x1="100" y1="30" x2="140" y2="30" stroke="#081b38" stroke-width="3"/>
+            <circle cx="20" cy="30" r="14" fill="#081b38"/><text x="20" y="34" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">C</text>
+            <circle cx="60" cy="30" r="14" fill="#081b38"/><text x="60" y="34" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">C</text>
+            <circle cx="100" cy="30" r="14" fill="#081b38"/><text x="100" y="34" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">C</text>
+            <circle cx="140" cy="30" r="11" fill="#dc2626"/><text x="140" y="34" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">O</text>
+            <circle cx="60" cy="6" r="8" fill="#2563eb"/><text x="60" y="9" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+            <circle cx="100" cy="54" r="8" fill="#2563eb"/><text x="100" y="57" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+          </g>
+          <text x="168" y="118" font-size="11.5" font-weight="700" fill="#15803d" text-anchor="middle">Esqueleto principal de Carbono (C-H-O-N)</text>
+
+          <rect x="352" y="8" width="320" height="124" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <text x="512" y="28" font-size="13" font-weight="800" fill="#334155" text-anchor="middle">MUESTRAS MINERALES (Piedra caliza, Agua)</text>
+          <polygon points="390,95 410,55 445,50 465,85 430,100" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+          <circle cx="535" cy="70" r="16" fill="#0284c7"/><text x="535" y="74" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">H₂O</text>
+          <circle cx="595" cy="70" r="18" fill="#64748b"/><text x="595" y="74" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">CaCO₃</text>
+          <text x="512" y="118" font-size="11.5" font-weight="700" fill="#475569" text-anchor="middle">Sustancias Inorgánicas (Minerales y Agua)</text>
+        </svg>`
+      },
+      2: {
+        title: "Figura 2. Prueba térmica en mechero de Bunsen: Muestra 1 (Azúcar) vs. Muestra 2 (Sal)",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="318" height="124" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+          <text x="169" y="26" font-size="12.5" font-weight="800" fill="#9a3412" text-anchor="middle">MUESTRA 1: Compuesto Orgánico (Sacarosa)</text>
+          <rect x="145" y="95" width="36" height="28" fill="#475569" rx="3"/>
+          <path d="M163,95 C148,75 155,58 163,46 C171,58 178,75 163,95 Z" fill="#f97316"/>
+          <path d="M163,92 C154,78 158,65 163,56 C168,65 172,78 163,92 Z" fill="#facc15"/>
+          <path d="M70,52 L145,52" stroke="#334155" stroke-width="4"/>
+          <ellipse cx="163" cy="50" rx="26" ry="8" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+          <path d="M155,38 Q163,26 170,38" stroke="#64748b" stroke-width="2" fill="none"/>
+          <text x="169" y="118" font-size="11" font-weight="700" fill="#7c2d12" text-anchor="middle">Se funde y se carboniza (residuo negro de C)</text>
+
+          <rect x="352" y="8" width="318" height="124" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <text x="511" y="26" font-size="12.5" font-weight="800" fill="#1e3a8a" text-anchor="middle">MUESTRA 2: Compuesto Inorgánico (Sal NaCl)</text>
+          <rect x="492" y="95" width="36" height="28" fill="#475569" rx="3"/>
+          <path d="M510,95 C495,75 502,58 510,46 C518,58 525,75 510,95 Z" fill="#f97316"/>
+          <path d="M415,52 L490,52" stroke="#334155" stroke-width="4"/>
+          <ellipse cx="510" cy="50" rx="26" ry="8" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+          <circle cx="502" cy="48" r="3" fill="#ffffff"/><circle cx="512" cy="49" r="3" fill="#ffffff"/><circle cx="519" cy="48" r="3" fill="#ffffff"/>
+          <text x="511" y="118" font-size="11" font-weight="700" fill="#334155" text-anchor="middle">Cristales blancos estables (no se carboniza)</text>
+        </svg>`
+      },
+      3: {
+        title: "Figura 3. Clasificación de materiales de la lonchera según el origen del compuesto orgánico",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="318" height="124" rx="10" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
+          <text x="169" y="27" font-size="12.5" font-weight="800" fill="#854d0e" text-anchor="middle">ORIGEN NATURAL (Seres Vivos)</text>
+          <rect x="48" y="45" width="75" height="52" rx="12" fill="#d97706" stroke="#92400e" stroke-width="2"/>
+          <rect x="55" y="52" width="61" height="38" rx="8" fill="#fef3c7"/>
+          <text x="85" y="75" font-size="11" font-weight="800" fill="#92400e" text-anchor="middle">PAN</text>
+          <circle cx="185" cy="72" r="24" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>
+          <path d="M185,48 Q195,38 202,45" stroke="#15803d" stroke-width="3" fill="none"/>
+          <text x="262" y="68" font-size="11.5" font-weight="700" fill="#713f12" text-anchor="middle">Almidón, celulosa,</text>
+          <text x="262" y="84" font-size="11.5" font-weight="700" fill="#713f12" text-anchor="middle">azúcares y proteínas</text>
+          <text x="169" y="118" font-size="11" font-weight="800" fill="#15803d" text-anchor="middle">✔ Compuestos Orgánicos Naturales</text>
+
+          <rect x="352" y="8" width="318" height="124" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+          <text x="511" y="27" font-size="12.5" font-weight="800" fill="#1e3a8a" text-anchor="middle">ORIGEN SINTÉTICO (Industria / Petróleo)</text>
+          <rect x="402" y="38" width="36" height="64" rx="6" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+          <rect x="411" y="30" width="18" height="8" fill="#0284c7"/>
+          <text x="420" y="74" font-size="9.5" font-weight="800" fill="#0369a1" text-anchor="middle">PET</text>
+          <text x="545" y="65" font-size="11.5" font-weight="700" fill="#1e3a8a" text-anchor="middle">Plásticos, nailon,</text>
+          <text x="545" y="82" font-size="11.5" font-weight="700" fill="#1e3a8a" text-anchor="middle">poliéster y envases</text>
+          <text x="511" y="118" font-size="11" font-weight="800" fill="#1d4ed8" text-anchor="middle">✔ Compuestos Orgánicos Sintéticos</text>
+        </svg>`
+      },
+      4: {
+        title: "Figura 4. Reacción de combustión de hidrocarburos (Metano CH₄ y Propano C₃H₈)",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="660" height="124" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+          <g transform="translate(45, 28)">
+            <circle cx="45" cy="42" r="16" fill="#081b38"/><text x="45" y="46" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">C</text>
+            <circle cx="45" cy="10" r="9" fill="#2563eb"/><text x="45" y="13" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+            <circle cx="45" cy="74" r="9" fill="#2563eb"/><text x="45" y="77" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+            <circle cx="13" cy="42" r="9" fill="#2563eb"/><text x="13" y="45" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+            <circle cx="77" cy="42" r="9" fill="#2563eb"/><text x="77" y="45" font-size="9" font-weight="800" fill="#fff" text-anchor="middle">H</text>
+            <text x="45" y="98" font-size="11.5" font-weight="800" fill="#081b38" text-anchor="middle">Metano (CH₄)</text>
+          </g>
+          <text x="165" y="75" font-size="24" font-weight="900" fill="#081b38">+</text>
+          <g transform="translate(195, 42)">
+            <circle cx="22" cy="28" r="14" fill="#dc2626"/><circle cx="46" cy="28" r="14" fill="#dc2626"/>
+            <text x="34" y="32" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">O₂</text>
+            <text x="34" y="65" font-size="11.5" font-weight="800" fill="#dc2626" text-anchor="middle">Oxígeno</text>
+          </g>
+          <path d="M285,70 L345,70" stroke="#081b38" stroke-width="4"/>
+          <polygon points="345,63 362,70 345,77" fill="#081b38"/>
+          <g transform="translate(390, 22)">
+            <rect x="20" y="72" width="110" height="16" rx="4" fill="#334155"/>
+            <path d="M45,72 C40,42 55,22 75,8 C95,22 110,42 105,72 Z" fill="#f97316"/>
+            <path d="M58,72 C55,50 65,35 75,24 C85,35 95,50 92,72 Z" fill="#38bdf8"/>
+            <text x="195" y="45" font-size="13.5" font-weight="800" fill="#b45309" text-anchor="middle">🔥 COMBUSTIÓN</text>
+            <text x="195" y="65" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle">Gran liberación de</text>
+            <text x="195" y="82" font-size="12" font-weight="700" fill="#78350f" text-anchor="middle">Energía Térmica (Calor)</text>
+          </g>
+        </svg>`
+      },
+      5: {
+        title: "Figura 5. Muestras analizadas en el laboratorio: Sustancias Puras vs. Mezclas",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="8" y="10" width="155" height="120" rx="8" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+          <text x="85" y="28" font-size="11.5" font-weight="800" fill="#9a3412" text-anchor="middle">1. Alambre Cobre (Cu)</text>
+          <circle cx="65" cy="68" r="10" fill="#d97706"/><circle cx="85" cy="68" r="10" fill="#d97706"/><circle cx="105" cy="68" r="10" fill="#d97706"/>
+          <text x="85" y="112" font-size="10.5" font-weight="700" fill="#b45309" text-anchor="middle">Un solo tipo de átomo</text>
+
+          <rect x="174" y="10" width="155" height="120" rx="8" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="2"/>
+          <text x="251" y="28" font-size="11.5" font-weight="800" fill="#0369a1" text-anchor="middle">2. Agua Destilada (H₂O)</text>
+          <circle cx="235" cy="68" r="9" fill="#0284c7"/><circle cx="268" cy="68" r="9" fill="#0284c7"/>
+          <text x="251" y="112" font-size="10.5" font-weight="700" fill="#0369a1" text-anchor="middle">Fórmula química fija</text>
+
+          <rect x="340" y="10" width="155" height="120" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <text x="417" y="28" font-size="11.5" font-weight="800" fill="#334155" text-anchor="middle">3. Aire Atmosférico</text>
+          <circle cx="390" cy="60" r="7" fill="#2563eb"/><circle cx="430" cy="72" r="7" fill="#dc2626"/><circle cx="412" cy="82" r="6" fill="#16a34a"/>
+          <text x="417" y="112" font-size="10.5" font-weight="700" fill="#475569" text-anchor="middle">N₂ + O₂ + CO₂ + Ar</text>
+
+          <rect x="506" y="10" width="164" height="120" rx="8" fill="#ecfeff" stroke="#67e8f9" stroke-width="2"/>
+          <text x="588" y="28" font-size="11.5" font-weight="800" fill="#0e7490" text-anchor="middle">4. Agua de Mar</text>
+          <rect x="545" y="45" width="85" height="45" fill="#bae6fd" rx="4"/>
+          <circle cx="565" cy="65" r="4" fill="#0f172a"/><circle cx="590" cy="72" r="4" fill="#dc2626"/><circle cx="610" cy="60" r="4" fill="#0f172a"/>
+          <text x="588" y="112" font-size="10.5" font-weight="700" fill="#0e7490" text-anchor="middle">H₂O + Sales disueltas</text>
+        </svg>`
+      },
+      6: {
+        title: "Figura 6. Hierro (Fe) y Azufre (S): Antes de calentar (con imán) vs. Después de reaccionar (FeS)",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="318" height="124" rx="10" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
+          <text x="169" y="26" font-size="12" font-weight="800" fill="#854d0e" text-anchor="middle">ANTES DE CALENTAR: Fe + S sin reaccionar</text>
+          <ellipse cx="145" cy="92" rx="65" ry="14" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <circle cx="125" cy="90" r="4" fill="#334155"/><circle cx="150" cy="93" r="4" fill="#334155"/><circle cx="168" cy="89" r="4" fill="#334155"/>
+          <path d="M210,38 H245 V65 H210 Z" fill="#dc2626"/><path d="M190,38 H210 V65 H190 Z" fill="#94a3b8"/>
+          <text x="225" y="55" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">IMÁN</text>
+          <circle cx="185" cy="62" r="3.5" fill="#334155"/><circle cx="178" cy="70" r="3.5" fill="#334155"/>
+          <text x="169" y="120" font-size="11" font-weight="700" fill="#713f12" text-anchor="middle">El imán atrae y separa las limaduras de hierro</text>
+
+          <rect x="352" y="8" width="318" height="124" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+          <text x="511" y="26" font-size="12" font-weight="800" fill="#0f172a" text-anchor="middle">DESPUÉS DE CALENTAR: Sulfuro de Hierro (FeS)</text>
+          <ellipse cx="495" cy="92" rx="65" ry="14" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+          <text x="495" y="96" font-size="11" font-weight="800" fill="#f8fafc" text-anchor="middle">Sólido Negro (FeS)</text>
+          <path d="M555,38 H590 V65 H555 Z" fill="#dc2626"/><path d="M535,38 H555 V65 H535 Z" fill="#94a3b8"/>
+          <text x="511" y="120" font-size="11" font-weight="700" fill="#1e293b" text-anchor="middle">No es atraído por el imán (nuevas propiedades)</text>
+        </svg>`
+      },
+      7: {
+        title: "Figura 7. Curva térmica de ebullición: Vaso X (100 °C constante) vs. Vaso Y (102 °C a 108 °C)",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="318" height="124" rx="10" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="2"/>
+          <text x="169" y="26" font-size="12.5" font-weight="800" fill="#0369a1" text-anchor="middle">VASO X: Hierve fijo a 100 °C</text>
+          <rect x="75" y="42" width="56" height="58" rx="4" fill="#ffffff" stroke="#0284c7" stroke-width="2.5"/>
+          <rect x="78" y="60" width="50" height="38" fill="#bae6fd"/>
+          <rect x="112" y="32" width="8" height="55" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+          <circle cx="116" cy="87" r="6" fill="#dc2626"/>
+          <text x="220" y="68" font-size="15" font-weight="900" fill="#0369a1" text-anchor="middle">T = 100 °C</text>
+          <text x="220" y="86" font-size="11.5" font-weight="700" fill="#15803d" text-anchor="middle">(Permanece constante)</text>
+          <text x="169" y="118" font-size="11" font-weight="700" fill="#0c4a6e" text-anchor="middle">Comportamiento de temperatura de ebullición fija</text>
+
+          <rect x="352" y="8" width="318" height="124" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+          <text x="511" y="26" font-size="12.5" font-weight="800" fill="#9a3412" text-anchor="middle">VASO Y: Sube de 102 °C a 108 °C</text>
+          <rect x="415" y="42" width="56" height="58" rx="4" fill="#ffffff" stroke="#ea580c" stroke-width="2.5"/>
+          <rect x="418" y="60" width="50" height="38" fill="#fed7aa"/>
+          <rect x="452" y="32" width="8" height="55" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+          <circle cx="456" cy="87" r="6" fill="#dc2626"/>
+          <text x="565" y="68" font-size="14" font-weight="900" fill="#c2410c" text-anchor="middle">102 °C → 108 °C</text>
+          <text x="565" y="86" font-size="11.5" font-weight="700" fill="#b45309" text-anchor="middle">(Temperatura variable)</text>
+          <text x="511" y="118" font-size="11" font-weight="700" fill="#7c2d12" text-anchor="middle">Variación térmica durante la evaporación</text>
+        </svg>`
+      },
+      8: {
+        title: "Figura 8. Materiales observados en la cocina: Aluminio (Al), Bicarbonato (NaHCO₃) y Sopa",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="205" height="120" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+          <text x="112" y="28" font-size="12" font-weight="800" fill="#0f172a" text-anchor="middle">1. Papel Aluminio (Al)</text>
+          <rect x="58" y="44" width="108" height="42" rx="4" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+          <text x="112" y="70" font-size="14" font-weight="900" fill="#1e293b" text-anchor="middle">Al - Al - Al</text>
+          <text x="112" y="112" font-size="10.5" font-weight="700" fill="#475569" text-anchor="middle">Átomos de una sola clase</text>
+
+          <rect x="237" y="10" width="205" height="120" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+          <text x="339" y="28" font-size="12" font-weight="800" fill="#1e3a8a" text-anchor="middle">2. Bicarbonato Puro</text>
+          <rect x="285" y="44" width="108" height="42" rx="6" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+          <text x="339" y="70" font-size="14" font-weight="900" fill="#1d4ed8" text-anchor="middle">NaHCO₃</text>
+          <text x="339" y="112" font-size="10.5" font-weight="700" fill="#1e40af" text-anchor="middle">Unión química en proporción fija</text>
+
+          <rect x="464" y="10" width="206" height="120" rx="10" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
+          <text x="567" y="28" font-size="12" font-weight="800" fill="#854d0e" text-anchor="middle">3. Sopa de Verduras</text>
+          <ellipse cx="567" cy="66" rx="58" ry="22" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+          <circle cx="545" cy="64" r="6" fill="#ea580c"/><circle cx="568" cy="70" r="5" fill="#16a34a"/><circle cx="588" cy="62" r="6" fill="#fef08a"/>
+          <text x="567" y="112" font-size="10.5" font-weight="700" fill="#713f12" text-anchor="middle">Varios ingredientes variables</text>
+        </svg>`
+      },
+      9: {
+        title: "Figura 9. Proceso de disolución de cristales de sal fina en agua tibia",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="660" height="124" rx="10" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="2"/>
+          <g transform="translate(55, 22)">
+            <rect x="0" y="22" width="70" height="72" rx="5" fill="#fff" stroke="#0284c7" stroke-width="2.5"/>
+            <rect x="3" y="42" width="64" height="50" fill="#bae6fd"/>
+            <circle cx="35" cy="12" r="3" fill="#0f172a"/><circle cx="28" cy="18" r="3" fill="#0f172a"/><circle cx="42" cy="17" r="3" fill="#0f172a"/>
+            <text x="35" y="108" font-size="11" font-weight="800" fill="#0369a1" text-anchor="middle">1. Sal (Menor prop.) + Agua</text>
+          </g>
+          <path d="M180,68 L245,68" stroke="#0284c7" stroke-width="3.5"/><polygon points="245,62 260,68 245,74" fill="#0284c7"/>
+          <text x="215" y="54" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">Agitación 1 min</text>
+          <g transform="translate(295, 22)">
+            <rect x="0" y="22" width="75" height="72" rx="5" fill="#fff" stroke="#0284c7" stroke-width="2.5"/>
+            <rect x="3" y="38" width="69" height="54" fill="#7dd3fc"/>
+            <text x="37" y="108" font-size="11" font-weight="800" fill="#0369a1" text-anchor="middle">2. 1 Sola Fase Uniforme</text>
+          </g>
+          <rect x="425" y="28" width="220" height="84" rx="8" fill="#ffffff" stroke="#bae6fd" stroke-width="2"/>
+          <text x="535" y="52" font-size="12.5" font-weight="800" fill="#081b38" text-anchor="middle">Líquido 100 % Transparente</text>
+          <text x="535" y="72" font-size="11" font-weight="700" fill="#475569" text-anchor="middle">• No se distinguen cristales</text>
+          <text x="535" y="90" font-size="11" font-weight="700" fill="#15803d" text-anchor="middle">• Distribución submicroscópica</text>
+        </svg>`
+      },
+      10: {
+        title: "Figura 10. Vaso de precipitados en reposo con agua potable (100 mL), aceite (50 mL) y arena",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="660" height="124" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+          <g transform="translate(140, 14)">
+            <rect x="0" y="6" width="110" height="106" rx="6" fill="#ffffff" stroke="#081b38" stroke-width="3"/>
+            <!-- Capa 1: Aceite -->
+            <rect x="4" y="22" width="102" height="24" fill="#facc15"/>
+            <!-- Capa 2: Agua -->
+            <rect x="4" y="46" width="102" height="38" fill="#38bdf8"/>
+            <!-- Capa 3: Arena -->
+            <rect x="4" y="84" width="102" height="25" fill="#a16207"/>
+            <circle cx="25" cy="95" r="3" fill="#78350f"/><circle cx="55" cy="98" r="3.5" fill="#78350f"/><circle cx="85" cy="94" r="3" fill="#78350f"/>
+          </g>
+          <g transform="translate(285, 26)">
+            <text x="0" y="18" font-size="13" font-weight="800" fill="#b45309">← Capa Superior: Aceite de cocina amarillo (50 mL)</text>
+            <text x="0" y="54" font-size="13" font-weight="800" fill="#0369a1">← Capa Intermedia: Agua potable transparente (100 mL)</text>
+            <text x="0" y="88" font-size="13" font-weight="800" fill="#78350f">← Fondo del vaso: Arena gruesa de río sedimentada</text>
+          </g>
+        </svg>`
+      },
+      11: {
+        title: "Figura 11. Las cuatro botellas transparentes expuestas en la feria científica escolar",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="152" height="120" rx="8" fill="#f0f9ff" stroke="#93c5fd" stroke-width="2"/>
+          <text x="86" y="28" font-size="11.5" font-weight="800" fill="#1e3a8a" text-anchor="middle">BOTELLA 1</text>
+          <rect x="64" y="38" width="44" height="54" rx="6" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+          <text x="86" y="112" font-size="10.5" font-weight="700" fill="#0369a1" text-anchor="middle">Alcohol + Agua (Uniforme)</text>
+
+          <rect x="174" y="10" width="152" height="120" rx="8" fill="#fefce8" stroke="#fde047" stroke-width="2"/>
+          <text x="250" y="28" font-size="11.5" font-weight="800" fill="#854d0e" text-anchor="middle">BOTELLA 2</text>
+          <rect x="228" y="38" width="44" height="54" rx="6" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+          <rect x="233" y="42" width="14" height="7" fill="#d97706"/><circle cx="242" cy="84" r="5" fill="#475569"/><circle cx="258" cy="85" r="5" fill="#64748b"/>
+          <text x="250" y="112" font-size="10.5" font-weight="700" fill="#854d0e" text-anchor="middle">Agua + Piedras + Corcho</text>
+
+          <rect x="338" y="10" width="152" height="120" rx="8" fill="#f0f9ff" stroke="#93c5fd" stroke-width="2"/>
+          <text x="414" y="28" font-size="11.5" font-weight="800" fill="#1e3a8a" text-anchor="middle">BOTELLA 3</text>
+          <rect x="392" y="38" width="44" height="54" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+          <text x="414" y="112" font-size="10.5" font-weight="700" fill="#334155" text-anchor="middle">Vinagre blanco filtrado</text>
+
+          <rect x="502" y="10" width="168" height="120" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+          <text x="586" y="28" font-size="11.5" font-weight="800" fill="#991b1b" text-anchor="middle">BOTELLA 4</text>
+          <rect x="564" y="38" width="44" height="54" rx="6" fill="#fff1f2" stroke="#e11d48" stroke-width="2"/>
+          <circle cx="576" cy="54" r="6" fill="#ef4444"/><rect x="586" y="62" width="12" height="10" fill="#facc15"/><circle cx="578" cy="78" r="6" fill="#f97316"/>
+          <text x="586" y="112" font-size="10.5" font-weight="700" fill="#991b1b" text-anchor="middle">Trozos Papaya, Banano, Uva</text>
+        </svg>`
+      },
+      12: {
+        title: "Figura 12. Montaje secuencial en el laboratorio para separar Arena Insoluble y Sal Disuelta",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="315" height="124" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+          <text x="167" y="26" font-size="12" font-weight="800" fill="#166534" text-anchor="middle">PASO 1: Embudo con Papel de Filtro Poroso</text>
+          <polygon points="135,38 199,38 173,72 161,72" fill="#fef3c7" stroke="#081b38" stroke-width="2"/>
+          <circle cx="160" cy="50" r="4" fill="#a16207"/><circle cx="172" cy="52" r="4" fill="#a16207"/>
+          <rect x="145" y="76" width="44" height="36" rx="3" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+          <text x="167" y="124" font-size="11" font-weight="700" fill="#15803d" text-anchor="middle">Retiene la arena sólida y pasa agua con sal</text>
+
+          <rect x="355" y="8" width="315" height="124" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+          <text x="512" y="26" font-size="12" font-weight="800" fill="#9a3412" text-anchor="middle">PASO 2: Calentamiento de la Solución Filtrada</text>
+          <ellipse cx="512" cy="76" rx="45" ry="14" fill="#ffffff" stroke="#081b38" stroke-width="2.5"/>
+          <circle cx="498" cy="76" r="3" fill="#94a3b8"/><circle cx="512" cy="78" r="3" fill="#94a3b8"/><circle cx="525" cy="76" r="3" fill="#94a3b8"/>
+          <path d="M500,52 Q505,38 500,28 M522,52 Q527,38 522,28" stroke="#0284c7" stroke-width="2" fill="none"/>
+          <path d="M512,108 C504,96 508,88 512,82 C516,88 520,96 512,108 Z" fill="#f97316"/>
+          <text x="512" y="124" font-size="11" font-weight="700" fill="#9a3412" text-anchor="middle">El agua pasa a vapor y queda la sal seca</text>
+        </svg>`
+      },
+      13: {
+        title: "Figura 13 (Pregunta Abierta 1). Comportamiento térmico de Compuestos Orgánicos vs. Minerales",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="660" height="124" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+          <g transform="translate(45, 25)">
+            <rect x="0" y="10" width="240" height="75" rx="8" fill="#1e293b"/>
+            <text x="120" y="38" font-size="13" font-weight="800" fill="#fde047" text-anchor="middle">Azúcar / Pan / Madera + Fuego</text>
+            <text x="120" y="62" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">→ Se carboniza (Color Negro: C)</text>
+          </g>
+          <text x="340" y="72" font-size="22" font-weight="900" fill="#b45309" text-anchor="middle">VS.</text>
+          <g transform="translate(395, 25)">
+            <rect x="0" y="10" width="240" height="75" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+            <text x="120" y="38" font-size="13" font-weight="800" fill="#081b38" text-anchor="middle">Sal de Cocina (NaCl) + Calor</text>
+            <text x="120" y="62" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">→ Mineral inorgánico (No arde)</text>
+          </g>
+        </svg>`
+      },
+      14: {
+        title: "Figura 14 (Pregunta Abierta 2). Agua Mineral Comercial vs. Sustancias Químicamente Puras",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="320" height="124" rx="10" fill="#ecfeff" stroke="#67e8f9" stroke-width="2"/>
+          <text x="170" y="28" font-size="12.5" font-weight="800" fill="#0e7490" text-anchor="middle">AGUA MINERAL DE MANANTIAL</text>
+          <text x="170" y="58" font-size="12" font-weight="700" fill="#0f172a" text-anchor="middle">Contiene: H₂O + Ca²⁺ + Mg²⁺ + Na⁺ + Cl⁻</text>
+          <text x="170" y="85" font-size="11.5" font-weight="700" fill="#0369a1" text-anchor="middle">Varios componentes disueltos</text>
+          <text x="170" y="114" font-size="11" font-weight="800" fill="#b45309" text-anchor="middle">¿Sustancia pura o Mezcla homogénea?</text>
+
+          <rect x="350" y="8" width="320" height="124" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+          <text x="510" y="28" font-size="12.5" font-weight="800" fill="#166534" text-anchor="middle">LABORATORIO DE QUÍMICA</text>
+          <text x="510" y="58" font-size="12" font-weight="700" fill="#081b38" text-anchor="middle">• Agua Destilada: Solo moléculas H₂O</text>
+          <text x="510" y="82" font-size="12" font-weight="700" fill="#081b38" text-anchor="middle">• Cilindro Oxígeno: Solo moléculas O₂</text>
+          <text x="510" y="114" font-size="11" font-weight="800" fill="#15803d" text-anchor="middle">Sustancias Químicamente Puras</text>
+        </svg>`
+      },
+      15: {
+        title: "Figura 15 (Pregunta Abierta 3). Comparación de las dos jarras preparadas en el Día de la Ciencia",
+        svg: `<svg viewBox="0 0 680 140" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="8" width="318" height="124" rx="10" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="2"/>
+          <text x="169" y="28" font-size="12.5" font-weight="800" fill="#0369a1" text-anchor="middle">JARRA 1: Agua + Azúcar + Pizca de Sal</text>
+          <rect x="135" y="38" width="68" height="56" rx="6" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5"/>
+          <text x="169" y="116" font-size="11.5" font-weight="700" fill="#0c4a6e" text-anchor="middle">Líquido transparente (1 sola fase visible)</text>
+
+          <rect x="352" y="8" width="318" height="124" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+          <text x="511" y="28" font-size="12.5" font-weight="800" fill="#991b1b" text-anchor="middle">JARRA 2: Jugo + Fresa + Manzana + Hielo</text>
+          <rect x="477" y="38" width="68" height="56" rx="6" fill="#fecdd3" stroke="#e11d48" stroke-width="2.5"/>
+          <rect x="485" y="42" width="14" height="10" fill="#e0f2fe"/><circle cx="505" cy="68" r="6" fill="#dc2626"/><rect x="520" y="70" width="12" height="10" fill="#fde047"/>
+          <text x="511" y="116" font-size="11.5" font-weight="700" fill="#991b1b" text-anchor="middle">Trozos y semillas visibles (Varias fases)</text>
+        </svg>`
+      }
+    };
+
+    /*************************************************************************
+     * BANCO DE 12 PREGUNTAS CERRADAS (QUÍMICA 6° GRADO - PRUEBA SABER)
+     * Sumatoria exacta = 3.70 puntos:
+     *  - Preguntas 1 a 10: 0.31 puntos cada una (3.10 puntos)
+     *  - Preguntas 11 a 12: 0.30 puntos cada una (0.60 puntos)
+     *  Total Selección Múltiple = 3.70 puntos.
+     * Clave equilibrada (3 A, 3 B, 3 C, 3 D) sin patrones A-B-C-D ni >2 consecutivas:
+     *  P1:B, P2:D, P3:A, P4:C, P5:C, P6:A, P7:D, P8:B, P9:A, P10:D, P11:B, P12:C
+     *************************************************************************/
+    const CLOSED_QUESTIONS = [
+      {
+        id: 1,
+        points: 0.31,
+        topic: "Compuestos Orgánicos",
+        context: "Durante una salida de observación ecológica al huerto escolar del Gimnasio Cristiano Faro de Luz dirigida por el profesor Cristian David Ayazo, los estudiantes de sexto grado recolectan hojas secas de un árbol de mango, trozos de madera, cáscaras de naranja y pequeñas piedras calizas del suelo. En el laboratorio de química, el docente explica que los tejidos producidos por los seres vivos, como la celulosa de la madera, el almidón de las semillas y los azúcares de las frutas, pertenecen al grupo de los compuestos orgánicos, mientras que la roca caliza y el agua del riego corresponden a sustancias inorgánicas que cumplen funciones diferentes en la naturaleza.",
+        stem: "Teniendo en cuenta la composición atómica que caracteriza a todos los compuestos orgánicos presentes en las hojas, la madera y las frutas recolectadas, ¿cuál es el elemento químico fundamental que forma el esqueleto principal de sus moléculas?",
+        options: {
+          A: "El calcio metálico unido al cloro porque endurece las paredes celulares de las plantas terrestres.",
+          B: "El carbono unido principalmente a átomos de hidrógeno, oxígeno y nitrógeno en cadenas estables.",
+          C: "El hierro magnético combinado con azufre porque transporta minerales desde las raíces al tallo.",
+          D: "El sodio puro disuelto en helio gaseoso porque permite absorber la radiación solar en las hojas."
+        },
+        correct: "B"
+      },
+      {
+        id: 2,
+        points: 0.31,
+        topic: "Compuestos Orgánicos",
+        context: "En una práctica experimental de química para sexto grado, el profesor Cristian David Ayazo entrega a los estudiantes dos recipientes de vidrio idénticos rotulados como Muestra 1 y Muestra 2, ambos con cristales blancos muy parecidos a simple vista. Para identificar cuál de los dos sólidos es un compuesto orgánico (sacarosa o azúcar de mesa) y cuál es un compuesto inorgánico (cloruro de sodio o sal de cocina), un estudiante coloca una pequeña porción de cada muestra en dos cucharas de combustión y las acerca a la llama del mechero de Bunsen durante dos minutos, registrando cuidadosamente los cambios ocurridos.",
+        stem: "Si la Muestra 1 corresponde al compuesto orgánico (azúcar) y la Muestra 2 corresponde al compuesto inorgánico (sal común), ¿qué observación experimental permite diferenciar correctamente la Muestra 1 durante el calentamiento?",
+        options: {
+          A: "La Muestra 1 permanece blanca sin fundirse a altas temperaturas porque sus enlaces son metálicos.",
+          B: "La Muestra 1 se transforma en un imán permanente porque el calor ordena sus átomos de hierro puro.",
+          C: "La Muestra 1 se congela instantáneamente sobre el mechero porque absorbe el frío del aire cercano.",
+          D: "La Muestra 1 se funde rápidamente y se ennegrece formando un residuo de carbón al descomponerse."
+        },
+        correct: "D"
+      },
+      {
+        id: 3,
+        points: 0.31,
+        topic: "Compuestos Orgánicos",
+        context: "En la vida cotidiana utilizamos una gran variedad de materiales formados por compuestos orgánicos, los cuales se dividen en dos grandes grupos según su origen: los compuestos orgánicos naturales, que son sintetizados directamente por plantas, animales o microorganismos (como el algodón, la lana, las proteínas, las grasas vegetales y el caucho natural), y los compuestos orgánicos sintéticos, que son fabricados artificialmente por el ser humano en laboratorios e industrias químicas a partir de derivados del petróleo (como los envases de plástico, el nailon, el poliéster y los detergentes).",
+        stem: "Si un estudiante de sexto grado revisa los objetos que lleva dentro de su lonchera escolar y desea clasificarlos según el origen de sus compuestos orgánicos, ¿cuál de las siguientes comparaciones es químicamente correcta?",
+        options: {
+          A: "El almidón del pan es un compuesto orgánico natural y la botella plástica es un orgánico sintético.",
+          B: "La manzana fresca es un compuesto orgánico sintético y la bolsa de polietileno es un mineral puro.",
+          C: "El jugo de naranja natural es un plástico derivado del petróleo y la cuchara acrílica es vegetal.",
+          D: "El queso campesino es una roca inorgánica fundida y la servilleta de papel es un metal sintético."
+        },
+        correct: "A"
+      },
+      {
+        id: 4,
+        points: 0.31,
+        topic: "Compuestos Orgánicos",
+        context: "En la mayoría de los hogares colombianos los alimentos se cocinan utilizando estufas conectadas a la red de gas natural domiciliario o a cilindros metálicos de gas propano. El profesor Cristian David Ayazo explica a los estudiantes de sexto grado que tanto el metano (CH₄) del gas natural como el propano (C₃H₈) son hidrocarburos, es decir, compuestos orgánicos formados exclusivamente por átomos de carbono e hidrógeno. Además, la mayoría de los compuestos orgánicos presentan enlaces covalentes, suelen tener poca solubilidad en agua (como ocurre con los aceites y las ceras) y arden con facilidad en presencia de oxígeno.",
+        stem: "¿Qué propiedad característica de los compuestos orgánicos como el metano, el propano, la cera de una vela o el aceite vegetal explica su utilidad como combustibles domésticos e industriales?",
+        options: {
+          A: "Que están formados únicamente por agua líquida y apagan cualquier chispa eléctrica al instante.",
+          B: "Que conducen la corriente eléctrica mejor que los cables de cobre cuando se enfrían bajo cero.",
+          C: "Que reaccionan con el oxígeno durante la combustión liberando gran cantidad de energía térmica.",
+          D: "Que se disuelven completamente en agua fría formando cristales metálicos pesados e incombustibles."
+        },
+        correct: "C"
+      },
+      {
+        id: 5,
+        points: 0.31,
+        topic: "Sustancias Puras y Mezclas",
+        context: "Para clasificar la materia que nos rodea, la química establece una distinción fundamental entre las sustancias puras y las mezclas. Una sustancia pura es aquella que tiene una composición química fija, definida e invariable en cualquier parte de la muestra, y cuyas propiedades físicas (como la densidad, el punto de fusión y el punto de ebullición) son constantes; además, sus componentes no pueden separarse por métodos físicos. En cambio, una mezcla resulta de la unión física de dos o más sustancias en proporciones variables, donde cada componente conserva su identidad química.",
+        stem: "Un estudiante analiza cuatro muestras en el laboratorio escolar: alambre de cobre puro (Cu), agua destilada pura (H₂O), aire atmosférico y agua de mar. ¿Cuál de las siguientes afirmaciones clasifica correctamente estas muestras?",
+        options: {
+          A: "El aire atmosférico y el agua de mar son sustancias puras porque se encuentran en la naturaleza.",
+          B: "El alambre de cobre y el agua destilada son mezclas porque pueden separarse usando un colador.",
+          C: "El cobre y el agua destilada son sustancias puras, mientras que el aire y el agua de mar son mezclas.",
+          D: "Las cuatro muestras analizadas son elementos químicos puros porque están ubicadas en la tabla periódica."
+        },
+        correct: "C"
+      },
+      {
+        id: 6,
+        points: 0.31,
+        topic: "Sustancias Puras y Mezclas",
+        context: "Las sustancias puras se dividen a su vez en dos categorías: los elementos químicos, formados por una sola clase de átomos que no pueden descomponerse en sustancias más simples (como el hierro Fe y el azufre S), y los compuestos químicos, formados por la unión química de dos o más elementos en proporciones fijas. En el laboratorio, el profesor Cristian David Ayazo une en un plato de porcelana polvo amarillo de azufre con limaduras grises de hierro sin calentarlos; al acercar un imán, el hierro se separa fácilmente. Luego, calienta fuertemente otra porción igual hasta que reaccionan formando un sólido negro llamado sulfuro de hierro (FeS), el cual ya no es atraído por el imán.",
+        stem: "A partir de las evidencias observadas con el imán antes y después de suministrar calor intenso, ¿qué conclusión científica es correcta respecto a la unión del hierro y el azufre?",
+        options: {
+          A: "Antes de calentar formaban una mezcla física separable y después de reaccionar formaron un compuesto puro.",
+          B: "Antes de calentar formaban un elemento nuevo y después de calentar se convirtieron en dos gases nobles.",
+          C: "En ambos momentos se obtuvo exactamente la misma mezcla porque el calor nunca altera las propiedades.",
+          D: "El sulfuro de hierro negro sigue siendo una mezcla simple que puede separarse pasando un filtro de papel."
+        },
+        correct: "A"
+      },
+      {
+        id: 7,
+        points: 0.31,
+        topic: "Sustancias Puras y Mezclas",
+        context: "Una de las pruebas más confiables que utilizan los químicos para comprobar si un líquido transparente e incoloro es una sustancia pura o una mezcla consiste en medir su temperatura de ebullición mientras hierve a presión constante. Cuando se calienta una sustancia pura, como el agua destilada a nivel del mar, la temperatura sube hasta alcanzar los 100 °C y permanece estrictamente constante en ese valor hasta que todo el líquido pasa a vapor. Por el contrario, cuando se calienta una mezcla de agua con sal disuelta, el líquido comienza a hervir a más de 100 °C y su temperatura sigue subiendo a medida que se evapora el agua.",
+        stem: "Si un estudiante de sexto grado calienta dos vasos con líquidos transparentes (Vaso X y Vaso Y) y observa que el Vaso X hierve manteniendo su temperatura fija en 100 °C mientras el Vaso Y hierve subiendo de 102 °C a 108 °C, ¿qué puede deducir?",
+        options: {
+          A: "Que el Vaso X contiene una mezcla concentrada de sal y el Vaso Y contiene únicamente agua destilada pura.",
+          B: "Que ambos vasos contienen sustancias puras idénticas porque todos los líquidos transparentes son iguales.",
+          C: "Que el termómetro utilizado se dañó en el Vaso X porque ningún líquido mantiene constante su temperatura.",
+          D: "Que el Vaso X contiene una sustancia pura de composición fija y el Vaso Y contiene una mezcla con soluto."
+        },
+        correct: "D"
+      },
+      {
+        id: 8,
+        points: 0.31,
+        topic: "Sustancias Puras y Mezclas",
+        context: "Durante una actividad práctica en casa orientada por el profesor Cristian David Ayazo, los estudiantes de sexto grado observan tres materiales de uso cotidiano en la cocina: el primero es una lámina de papel aluminio constituida únicamente por átomos de aluminio (Al); el segundo es un sobre de bicarbonato de sodio farmacéutico puro cuya fórmula química definida es NaHCO₃; y el tercero es un plato de sopa de verduras casera preparado con agua, sal, trozos de papa, zanahoria, arvejas y cilantro picado, cuyos ingredientes pueden agregarse en mayor o menor cantidad según el gusto de quien cocina.",
+        stem: "¿En qué orden se clasifican químicamente el papel aluminio (Al), el bicarbonato de sodio puro (NaHCO₃) y la sopa de verduras casera según la organización de la materia?",
+        options: {
+          A: "El papel aluminio es un compuesto químico, el bicarbonato es una mezcla y la sopa es un elemento puro.",
+          B: "El papel aluminio es un elemento puro, el bicarbonato es un compuesto puro y la sopa es una mezcla.",
+          C: "Los tres materiales de la cocina son mezclas heterogéneas porque se utilizan para preparar alimentos.",
+          D: "El papel aluminio y la sopa son sustancias puras simples, mientras que el bicarbonato es una solución."
+        },
+        correct: "B"
+      },
+      {
+        id: 9,
+        points: 0.31,
+        topic: "Mezclas Homogéneas y Heterogéneas",
+        context: "Cuando combinamos dos o más sustancias sin que ocurra una reacción química entre ellas, obtenemos una mezcla que puede clasificarse según el aspecto de sus fases como homogénea o heterogénea. Las mezclas homogéneas, también llamadas disoluciones o soluciones químicas, se caracterizan porque sus componentes se integran de manera tan uniforme a nivel submicroscópico que no es posible distinguirlos a simple vista ni siquiera con un microscopio óptico convencional, presentando una sola fase uniforme en todas sus partes. En toda solución existe un solvente (el componente en mayor proporción) y uno o más solutos.",
+        stem: "Un estudiante agrega una cucharadita de sal de cocina fina en un vaso con agua tibia, agita durante un minuto hasta que los cristales desaparecen por completo y observa un líquido totalmente transparente. ¿Qué tipo de sistema preparó?",
+        options: {
+          A: "Preparó una mezcla homogénea o solución donde el agua actúa como solvente y la sal actúa como soluto.",
+          B: "Preparó una mezcla heterogénea de tres fases porque la sal queda flotando en la superficie del vaso.",
+          C: "Preparó un nuevo elemento químico de la tabla periódica porque el agua destruyó los átomos de sodio.",
+          D: "Preparó una suspensión turbia de arena gruesa donde los granos se observan fácilmente en el fondo."
+        },
+        correct: "A"
+      },
+      {
+        id: 10,
+        points: 0.31,
+        topic: "Mezclas Homogéneas y Heterogéneas",
+        context: "A diferencia de las soluciones, las mezclas heterogéneas son aquellas en las cuales sus componentes no se distribuyen de manera uniforme, por lo que presentan dos o más fases o capas claramente diferenciables a simple vista o con ayuda de una lupa, y su composición varía dependiendo del punto de la muestra que se tome. En una experiencia de laboratorio, un grupo de estudiantes de sexto grado vierte dentro de un mismo vaso de precipitados transparente 100 mL de agua potable, 50 mL de aceite de cocina amarillo y dos cucharadas de arena gruesa de río; luego agitan con una varilla de vidrio y dejan reposar el vaso durante cinco minutos.",
+        stem: "Al observar el vaso en reposo después de los cinco minutos, ¿cómo se clasifica la mezcla formada por el agua, el aceite de cocina y la arena de río, y cuántas fases visibles presenta?",
+        options: {
+          A: "Se clasifica como una mezcla homogénea de una sola fase porque la arena disuelve totalmente al aceite.",
+          B: "Se clasifica como una sustancia pura compuesta porque los tres ingredientes se unen mediante enlaces.",
+          C: "Se clasifica como una disolución gaseosa uniforme porque el aceite y la arena se evaporan en el vaso.",
+          D: "Se clasifica como una mezcla heterogénea con tres fases diferenciables: arena al fondo, agua y aceite arriba."
+        },
+        correct: "D"
+      },
+      {
+        id: 11,
+        points: 0.30,
+        topic: "Mezclas Homogéneas y Heterogéneas",
+        context: "En una feria científica del colegio evaluada por el profesor Cristian David Ayazo, cuatro estudiantes de sexto grado presentan diferentes botellas transparentes con muestras preparadas por ellos mismos para explicar la diferencia entre mezclas homogéneas y mezclas heterogéneas. La botella 1 contiene alcohol antiséptico disuelto en agua formando un líquido totalmente uniforme; la botella 2 contiene agua con piedras pequeñas de río y trozos de corcho flotando; la botella 3 contiene vinagre blanco filtrado de cocina; y la botella 4 contiene una ensalada de frutas picadas con trozos visibles de papaya, banano, fresas y uvas enteras.",
+        stem: "¿Cuáles de las cuatro botellas expuestas en la feria científica contienen exclusivamente mezclas heterogéneas donde se distinguen dos o más fases a simple vista?",
+        options: {
+          A: "Las botellas 1 y 3 porque tanto el alcohol en agua como el vinagre presentan piedras sedimentadas.",
+          B: "Las botellas 2 y 4 porque en ambas se distinguen claramente sus componentes sólidos en varias fases.",
+          C: "Las botellas 1 y 2 porque cualquier líquido mezclado con alcohol forma capas separadas de inmediato.",
+          D: "Las botellas 3 y 4 porque el vinagre blanco filtrado está formado por granos visibles de arena gruesa."
+        },
+        correct: "B"
+      },
+      {
+        id: 12,
+        points: 0.30,
+        topic: "Mezclas Homogéneas y Heterogéneas",
+        context: "Dado que en cualquier mezcla las sustancias participantes conservan sus propiedades físicas individuales, los científicos aprovechan diferencias en el tamaño de partícula, la densidad o el punto de ebullición para separarlas mediante métodos físicos. Por ejemplo, la filtración emplea un papel poroso o filtro que retiene partículas sólidas insolubles de una mezcla heterogénea dejando pasar el líquido; la decantación permite separar líquidos que no se mezclan y tienen diferente densidad (como agua y aceite); mientras que la evaporación permite recuperar un sólido soluble disuelto en una mezcla homogénea calentando hasta vaporizar el solvente líquido.",
+        stem: "Si un estudiante tiene accidentalmente un vaso que contiene agua, sal disuelta y arena insoluble en el fondo, ¿qué secuencia de dos métodos físicos debe aplicar en orden para separar primero la arena y luego recuperar la sal seca?",
+        options: {
+          A: "Primero aplicar imantación con un imán de neodimio y luego pasar la mezcla por un tamiz de alambre grueso.",
+          B: "Primero congelar todo el vaso en una nevera y luego cortar el bloque de hielo con una espátula metálica.",
+          C: "Primero realizar una filtración para retener la arena insoluble y luego evaporar el agua para obtener la sal.",
+          D: "Primero agregar aceite de cocina al vaso y luego agitar fuertemente para que la sal suba hasta la espuma."
+        },
+        correct: "C"
+      }
+    ];
+
+    /*************************************************************************
+     * BANCO DE 3 PREGUNTAS ABIERTAS (QUÍMICA 6° GRADO - COMPETENCIAS)
+     * Sumatoria exacta = 1.30 puntos (0.43 + 0.43 + 0.44 = 1.30)
+     * Total Examen = 3.70 + 1.30 = 5.00
+     *************************************************************************/
+    const OPEN_QUESTIONS = [
+      {
+        id: 13,
+        points: 0.43,
+        topic: "Compuestos Orgánicos",
+        context: "En la cocina de una vivienda o en el laboratorio escolar podemos encontrar sustancias que provienen de los seres vivos, como el azúcar de caña, el aceite vegetal de girasol, la harina de trigo o un trozo de madera seca, junto con otras sustancias de origen mineral como la sal de cocina, el agua potable o el bicarbonato. Cuando un estudiante acerca accidentalmente un trozo de pan o una cucharada de azúcar al fuego de la estufa, observa que rápidamente toma un color negro intenso (se carboniza) y desprende humo, mientras que si calienta sal común en una sartén seca, esta no se vuelve negra ni arde.",
+        stem: "Explica con tus propias palabras qué son los compuestos orgánicos, cuál es el elemento químico principal que los constituye y por qué los alimentos como el azúcar o el pan se vuelven negros (se carbonizan) al quemarse a diferencia de los minerales inorgánicos como la sal. Incluye al menos dos ejemplos cotidianos de compuestos orgánicos.",
+        keywords: [
+          "carbono", "organico", "organicos", "seres", "vivos", "hidrogeno", "oxigeno",
+          "azucar", "pan", "madera", "aceite", "proteinas", "almidon", "plastico", "quema",
+          "quemarse", "fuego", "calor", "carboniza", "negro", "combustion", "inorganico",
+          "sal", "moleculas", "cadenas", "elemento", "frutas", "plantas", "animales", "papel"
+        ]
+      },
+      {
+        id: 14,
+        points: 0.43,
+        topic: "Sustancias Puras y Mezclas",
+        context: "En un supermercado se venden botellas plásticas cuya etiqueta publicitaria dice «Agua mineral natural 100 % pura de manantial»; sin embargo, al leer la tabla nutricional impresa al respaldo de la botella, un estudiante de sexto grado descubre que el líquido contiene agua (H₂O) acompañada de cantidades variables de calcio, magnesio, sodio, bicarbonatos y cloruros disueltos. En cambio, en el laboratorio de química del colegio existe un frasco sellado rotulado como «Agua destilada químicamente pura (H₂O)» y un cilindro que contiene únicamente «Oxígeno gaseoso puro (O₂)».",
+        stem: "Compara y explica desde el punto de vista de la química cuál es la diferencia entre una sustancia pura (distinguiendo entre elemento y compuesto) y una mezcla, y argumenta por qué el agua mineral embotellada del supermercado es en realidad una mezcla aunque en el comercio la llamen agua pura.",
+        keywords: [
+          "sustancia", "sustancias", "pura", "puras", "mezcla", "mezclas", "elemento", "elementos",
+          "compuesto", "compuestos", "atomos", "formula", "fija", "variable", "proporcion",
+          "minerales", "sales", "calcio", "sodio", "magnesio", "destilada", "oxigeno", "agua",
+          "propiedades", "fisicos", "componentes", "separar", "unidos", "union", "quimica"
+        ]
+      },
+      {
+        id: 15,
+        points: 0.44,
+        topic: "Mezclas Homogéneas y Heterogéneas",
+        context: "Para celebrar el día de la ciencia en el Gimnasio Cristiano Faro de Luz con el profesor Cristian David Ayazo, los estudiantes de sexto grado preparan dos bebidas refrescantes en jarras de vidrio transparente. En la Jarra 1 disuelven completamente dos cucharadas de azúcar blanca y una pizca de sal en un litro de agua filtrada, obteniendo un líquido transparente donde no se distingue ninguna partícula sólida. En la Jarra 2 vierten jugo con trozos visibles de fresa picada, cubos de manzana, semillas de maracuyá y cubos de hielo flotando en la parte superior del recipiente.",
+        stem: "Analiza y compara las dos jarras preparadas por los estudiantes: identifica cuál corresponde a una mezcla homogénea (solución) y cuál a una mezcla heterogénea, explica qué ocurre con las fases visibles en cada caso y describe cómo podrías separar los componentes de ambas jarras en el laboratorio.",
+        keywords: [
+          "homogenea", "heterogenea", "solucion", "disolucion", "fases", "fase", "visible",
+          "visibles", "uniforme", "soluto", "solvente", "azucar", "sal", "agua", "frutas",
+          "fresa", "manzana", "hielo", "jarra", "filtracion", "filtro", "colador", "evaporacion",
+          "decantacion", "separar", "componentes", "simple", "vista", "distinguir", "liquido"
+        ]
+      }
+    ];
+
+    /*************************************************************************
+     * ESTADO GLOBAL DE LA APLICACIÓN
+     *************************************************************************/
+    let examState = {
+      active: false,
+      finished: false,
+      studentName: "",
+      startTimeISO: null,
+      endTimeISO: null,
+      elapsedTotalSeconds: 0,
+      currentIndex: 0, // 0..11 cerradas, 12..14 abiertas
+      currentQuestionSeconds: 0,
+      closedAnswers: {},
+      openAnswers: {},
+      tabSwitches: 0,
+      tabEvents: [],
+      tabPenalty: 0.0,
+      noiseEvents: [],
+      noisePenalty: 0.0,
+      finishReason: "",
+      verificationCode: "",
+      resultsSummary: null
+    };
+
+    let mainInterval = null;
+    let welcomeCheckInterval = null;
+    let audioContext = null;
+    let mediaStream = null;
+    let analyserNode = null;
+    let audioMonitorFrame = null;
+    let currentMicDb = 0;
+    let smoothedDb = 25;
+    let highNoiseStartMs = null;
+    let lastNoisePenaltyMs = 0;
+    let isInternalTransition = false;
+    let examActivationTimestamp = 0;
+    let qrJpegDataUrlGlobal = "";
+    let qrReportTextGlobal = "";
+
+    /*************************************************************************
+     * REFERENCIAS A ELEMENTOS DEL DOM (VERIFICADAS 1 A 1)
+     *************************************************************************/
+    const DOM = {
+      bannerImg: document.getElementById("institutional-banner-img"),
+      bannerUploadInput: document.getElementById("banner-upload-input"),
+      globalTimerChip: document.getElementById("global-timer-chip"),
+      globalTimerDisplay: document.getElementById("global-timer-display"),
+      tabSwitchesDisplay: document.getElementById("tab-switches-display"),
+      penaltyDisplay: document.getElementById("penalty-display"),
+      micMeterFill: document.getElementById("mic-meter-fill"),
+      micMeterText: document.getElementById("mic-meter-text"),
+      btnTeacherFinish: document.getElementById("btn-teacher-finish"),
+
+      screenWelcome: document.getElementById("screen-welcome"),
+      resumeBanner: document.getElementById("resume-banner"),
+      btnResumeExam: document.getElementById("btn-resume-exam"),
+      studentNameInput: document.getElementById("student-name"),
+      nameValidationMsg: document.getElementById("name-validation-msg"),
+      micSetupBox: document.getElementById("mic-setup-box"),
+      welcomeMicStatus: document.getElementById("welcome-mic-status"),
+      btnActivateMic: document.getElementById("btn-activate-mic"),
+      startReadinessHint: document.getElementById("start-readiness-hint"),
+      btnStartExam: document.getElementById("btn-start-exam"),
+
+      screenExam: document.getElementById("screen-exam"),
+      phaseBadge: document.getElementById("phase-badge"),
+      questionTopicBadge: document.getElementById("question-topic-badge"),
+      questionPointsBadge: document.getElementById("question-points-badge"),
+      questionCounter: document.getElementById("question-counter"),
+      questionTimerBox: document.getElementById("question-timer-box"),
+      questionTimerLabel: document.getElementById("question-timer-label"),
+      questionTimerDisplay: document.getElementById("question-timer-display"),
+      questionVisualTitle: document.getElementById("question-visual-title"),
+      questionVisualSub: document.getElementById("question-visual-sub"),
+      questionVisualSvg: document.getElementById("question-visual-svg"),
+      questionContext: document.getElementById("question-context"),
+      questionStem: document.getElementById("question-stem"),
+      optionsContainer: document.getElementById("options-container"),
+      openAnswerContainer: document.getElementById("open-answer-container"),
+      openTextarea: document.getElementById("open-textarea"),
+      sigLinesCount: document.getElementById("sig-lines-count"),
+      wordsCount: document.getElementById("words-count"),
+      coherenceBadge: document.getElementById("coherence-badge"),
+      openValidationMsg: document.getElementById("open-validation-msg"),
+      minTimeWarning: document.getElementById("min-time-warning"),
+      btnNextQuestion: document.getElementById("btn-next-question"),
+
+      screenResults: document.getElementById("screen-results"),
+      resStudentName: document.getElementById("res-student-name"),
+      resFinishReason: document.getElementById("res-finish-reason"),
+      resCorrectCount: document.getElementById("res-correct-count"),
+      resClosedScore: document.getElementById("res-closed-score"),
+      resOpenScore: document.getElementById("res-open-score"),
+      resTabPenalty: document.getElementById("res-tab-penalty"),
+      resNoisePenalty: document.getElementById("res-noise-penalty"),
+      resFinalGrade: document.getElementById("res-final-grade"),
+      qrDisplayImg: document.getElementById("qr-display-img"),
+      qrTempHolder: document.getElementById("qr-temp-holder"),
+      verificationCodeText: document.getElementById("verification-code-text"),
+      qrReportPreviewBox: document.getElementById("qr-report-preview-box"),
+      btnDownloadPdf: document.getElementById("btn-download-pdf"),
+
+      modalFullscreen: document.getElementById("modal-fullscreen"),
+      btnReturnFullscreen: document.getElementById("btn-return-fullscreen"),
+      modalMicLost: document.getElementById("modal-mic-lost"),
+      btnRestoreMic: document.getElementById("btn-restore-mic"),
+      modalAlert: document.getElementById("modal-alert"),
+      modalAlertTitle: document.getElementById("modal-alert-title"),
+      modalAlertBody: document.getElementById("modal-alert-body"),
+      btnCloseAlert: document.getElementById("btn-close-alert"),
+      modalTeacher: document.getElementById("modal-teacher"),
+      teacherPasswordInput: document.getElementById("teacher-password-input"),
+      teacherErrorMsg: document.getElementById("teacher-error-msg"),
+      btnCancelTeacher: document.getElementById("btn-cancel-teacher"),
+      btnConfirmTeacher: document.getElementById("btn-confirm-teacher")
+    };
+
+    /*************************************************************************
+     * INICIALIZACIÓN SIN ERRORES DEL BANNER EN WEB Y EN PDF
+     *************************************************************************/
+    function initBannerDisplay() {
+      const generatedBanner = renderOfficialBannerCanvas();
+      bannerForPdfJpeg = generatedBanner;
+
+      try {
+        const savedBanner = localStorage.getItem(CONFIG.bannerStorageKey);
+        if (savedBanner) {
+          DOM.bannerImg.src = savedBanner;
+          bannerForPdfJpeg = savedBanner;
+          return;
+        }
+      } catch (e) {}
+
+      DOM.bannerImg.src = generatedBanner;
+
+      const externalProbe = new Image();
+      externalProbe.onload = function() {
+        DOM.bannerImg.src = "image_f8ef00.jpg";
+        try {
+          const c = document.createElement("canvas");
+          c.width = 1200;
+          c.height = 216;
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(externalProbe, 0, 0, c.width, c.height);
+          bannerForPdfJpeg = c.toDataURL("image/jpeg", 0.95);
+        } catch (err) {}
+      };
+      externalProbe.src = "image_f8ef00.jpg";
+    }
+
+    DOM.bannerUploadInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const rawDataUrl = evt.target.result;
+        const tempImg = new Image();
+        tempImg.onload = function() {
+          const c = document.createElement("canvas");
+          c.width = 1200;
+          c.height = 216;
+          const ctx = c.getContext("2d");
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, c.width, c.height);
+          ctx.drawImage(tempImg, 0, 0, c.width, c.height);
+          const jpegUrl = c.toDataURL("image/jpeg", 0.95);
+          DOM.bannerImg.src = jpegUrl;
+          bannerForPdfJpeg = jpegUrl;
+          try {
+            localStorage.setItem(CONFIG.bannerStorageKey, jpegUrl);
+          } catch (err) {}
+        };
+        tempImg.src = rawDataUrl;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    /*************************************************************************
+     * UTILIDADES DE FORMATO Y PERSISTENCIA (localStorage)
+     *************************************************************************/
+    function formatSecondsMMSS(totalSec) {
+      const safeSec = Math.max(0, Math.floor(totalSec));
+      const m = Math.floor(safeSec / 60);
+      const s = safeSec % 60;
+      return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+
+    function saveProgressToStorage() {
+      try {
+        localStorage.setItem(CONFIG.storageKey, JSON.stringify(examState));
+      } catch (e) {
+        console.warn("No se pudo guardar en localStorage:", e);
+      }
+    }
+
+    function loadProgressFromStorage() {
+      try {
+        const raw = localStorage.getItem(CONFIG.storageKey);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function updateTopMonitoringBar() {
+      const remainingGlobal = Math.max(0, CONFIG.totalTimeSeconds - examState.elapsedTotalSeconds);
+      DOM.globalTimerDisplay.textContent = formatSecondsMMSS(remainingGlobal);
+      if (remainingGlobal <= 300 && examState.active) {
+        DOM.globalTimerChip.classList.add("urgent");
+      } else {
+        DOM.globalTimerChip.classList.remove("urgent");
+      }
+
+      DOM.tabSwitchesDisplay.textContent = `${examState.tabSwitches} / 3`;
+      const totalPenalty = +(examState.tabPenalty + examState.noisePenalty).toFixed(2);
+      DOM.penaltyDisplay.textContent = `-${totalPenalty.toFixed(1)}`;
+    }
+
+    function showCustomAlert(title, message) {
+      DOM.modalAlertTitle.textContent = title;
+      DOM.modalAlertBody.textContent = message;
+      DOM.modalAlert.classList.remove("hidden");
+    }
+
+    /*************************************************************************
+     * VALIDACIÓN ESTRICTA DE NOMBRE COMPLETO (MÍNIMO NOMBRE Y APELLIDO)
+     *************************************************************************/
+    function isFullNameValid(rawName) {
+      const cleaned = (rawName || "").trim().replace(/\s+/g, " ");
+      if (cleaned.length < 5) return false;
+      const parts = cleaned.split(" ").filter(part => /[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]{2,}/.test(part));
+      return parts.length >= 2;
+    }
+
+    /*************************************************************************
+     * GESTIÓN DE MICRÓFONO Y MEDIDOR EN DECIBELES (dB) SIN FALSOS BLOQUEOS
+     *************************************************************************/
+    let micReady = false;
+
+    async function requestAndStartMicrophone() {
+      isInternalTransition = true;
+      try {
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(t => t.stop());
+        }
+
+        try {
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: false,
+              noiseSuppression: false,
+              autoGainControl: false
+            },
+            video: false
+          });
+        } catch (constraintErr) {
+          mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: false
+          });
+        }
+
+        const audioTracks = mediaStream.getAudioTracks();
+        if (!audioTracks || audioTracks.length === 0) {
+          throw new Error("No se detectó pista de audio activa.");
+        }
+
+        audioTracks[0].onended = () => {
+          handleMicrophoneLost();
+        };
+
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!audioContext) {
+          audioContext = new AudioCtx();
+        }
+        if (audioContext.state === "suspended") {
+          await audioContext.resume().catch(() => {});
+        }
+
+        const source = audioContext.createMediaStreamSource(mediaStream);
+        analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 512;
+        analyserNode.smoothingTimeConstant = 0.7;
+        source.connect(analyserNode);
+
+        micReady = true;
+        DOM.micSetupBox.classList.add("ready");
+        DOM.welcomeMicStatus.textContent = "✔ Estado: Sonómetro activo y midiendo en decibeles (dB).";
+        DOM.welcomeMicStatus.style.color = "var(--success)";
+        DOM.btnActivateMic.textContent = "✅ Sonómetro Activo (dB)";
+        DOM.btnActivateMic.className = "btn btn-success";
+        DOM.modalMicLost.classList.add("hidden");
+
+        checkWelcomeReady();
+        startAudioLoop();
+        setTimeout(() => { isInternalTransition = false; }, 800);
+        return true;
+      } catch (err) {
+        micReady = false;
+        isInternalTransition = false;
+        DOM.micSetupBox.classList.remove("ready");
+        DOM.welcomeMicStatus.textContent = "❌ Error: No se concedió permiso al micrófono. Haz clic en el botón para autorizarlo.";
+        DOM.welcomeMicStatus.style.color = "var(--danger)";
+        checkWelcomeReady();
+        if (examState.active && !examState.finished) {
+          DOM.modalMicLost.classList.remove("hidden");
+        }
+        return false;
+      }
+    }
+
+    function handleMicrophoneLost() {
+      micReady = false;
+      DOM.micSetupBox.classList.remove("ready");
+      DOM.welcomeMicStatus.textContent = "⚠️ El micrófono se desactivó. Debes reactivarlo para continuar.";
+      DOM.welcomeMicStatus.style.color = "var(--danger)";
+      DOM.btnActivateMic.textContent = "🎙️ Reactivar Micrófono (dB)";
+      DOM.btnActivateMic.className = "btn btn-accent";
+      checkWelcomeReady();
+
+      if (examState.active && !examState.finished) {
+        DOM.modalMicLost.classList.remove("hidden");
+      }
+    }
+
+    function startAudioLoop() {
+      if (audioMonitorFrame) cancelAnimationFrame(audioMonitorFrame);
+      const dataArray = new Uint8Array(analyserNode ? analyserNode.frequencyBinCount : 256);
+
+      function updateMeter() {
+        if (!analyserNode || !mediaStream) return;
+        const tracks = mediaStream.getAudioTracks();
+        if (!tracks.length || tracks[0].readyState === "ended" || !tracks[0].enabled) {
+          handleMicrophoneLost();
+          return;
+        }
+
+        if (audioContext && audioContext.state === "suspended") {
+          audioContext.resume().catch(() => {});
+        }
+
+        analyserNode.getByteTimeDomainData(dataArray);
+        let sumSquares = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          const normalized = (dataArray[i] - 128) / 128;
+          sumSquares += normalized * normalized;
+        }
+        const rms = Math.sqrt(sumSquares / dataArray.length);
+
+        let targetDb = 22;
+        if (rms >= 0.0008) {
+          targetDb = 20 * Math.log10(rms) + 92;
+        }
+        smoothedDb = smoothedDb * 0.72 + targetDb * 0.28;
+        currentMicDb = Math.max(0, Math.min(100, Math.round(smoothedDb)));
+
+        DOM.micMeterFill.style.width = `${currentMicDb}%`;
+        DOM.micMeterText.textContent = `${currentMicDb} dB`;
+
+        if (currentMicDb >= CONFIG.micThresholdDb) {
+          DOM.micMeterFill.style.backgroundColor = "var(--danger)";
+        } else if (currentMicDb >= 55) {
+          DOM.micMeterFill.style.backgroundColor = "var(--warning)";
+        } else {
+          DOM.micMeterFill.style.backgroundColor = "#16a34a";
+        }
+
+        const now = Date.now();
+        if (examState.active && !examState.finished) {
+          if (currentMicDb > CONFIG.micThresholdDb) {
+            if (!highNoiseStartMs) {
+              highNoiseStartMs = now;
+            } else if (now - highNoiseStartMs >= CONFIG.micSustainMs) {
+              if (now - lastNoisePenaltyMs >= CONFIG.micCooldownMs) {
+                lastNoisePenaltyMs = now;
+                highNoiseStartMs = null;
+                registerNoisePenalty(currentMicDb);
+              }
+            }
+          } else {
+            highNoiseStartMs = null;
+          }
+        }
+
+        audioMonitorFrame = requestAnimationFrame(updateMeter);
+      }
+
+      audioMonitorFrame = requestAnimationFrame(updateMeter);
+    }
+
+    function registerNoisePenalty(peakDb) {
+      examState.noisePenalty = +(examState.noisePenalty + CONFIG.micPenaltyValue).toFixed(2);
+      const timeStr = new Date().toLocaleTimeString();
+      examState.noiseEvents.push({
+        time: timeStr,
+        decibels: peakDb
+      });
+      updateTopMonitoringBar();
+      saveProgressToStorage();
+      showCustomAlert(
+        "🔊 Alerta de Ruido en Decibeles (dB)",
+        `El sonómetro registró un nivel de ${peakDb} dB (superando el límite permitido de ${CONFIG.micThresholdDb} dB durante aproximadamente 1 segundo). Se ha aplicado una penalización de -${CONFIG.micPenaltyValue.toFixed(1)} puntos. Mantén silencio durante la evaluación.`
+      );
+    }
+
+    /*************************************************************************
+     * PANTALLA COMPLETA Y PAGE VISIBILITY API
+     *************************************************************************/
+    async function enterFullscreenSafe() {
+      isInternalTransition = true;
+      try {
+        const el = document.documentElement;
+        if (!document.fullscreenElement) {
+          if (el.requestFullscreen) {
+            await el.requestFullscreen();
+          } else if (el.webkitRequestFullscreen) {
+            await el.webkitRequestFullscreen();
+          }
+        }
+        DOM.modalFullscreen.classList.add("hidden");
+      } catch (e) {
+        console.warn("No se pudo activar pantalla completa automáticamente:", e);
+      } finally {
+        setTimeout(() => { isInternalTransition = false; }, 600);
+      }
+    }
+
+    document.addEventListener("fullscreenchange", () => {
+      if (!examState.active || examState.finished) return;
+      if (!document.fullscreenElement) {
+        DOM.modalFullscreen.classList.remove("hidden");
+      } else {
+        DOM.modalFullscreen.classList.add("hidden");
+      }
+    });
+
+    DOM.btnReturnFullscreen.addEventListener("click", () => {
+      enterFullscreenSafe();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!examState.active || examState.finished) return;
+      if (isInternalTransition) return;
+      if (Date.now() - examActivationTimestamp < 1500) return;
+
+      if (document.visibilityState === "hidden") {
+        examState.tabSwitches += 1;
+        const timeStr = new Date().toLocaleTimeString();
+        examState.tabEvents.push(timeStr);
+
+        if (examState.tabSwitches === 1) {
+          examState.tabPenalty = +(examState.tabPenalty + CONFIG.tabPenalties[0]).toFixed(2);
+          updateTopMonitoringBar();
+          saveProgressToStorage();
+          showCustomAlert(
+            "⚠️ Primera Salida de la Página Detectada",
+            `Has salido de la pestaña activa de la evaluación (Salida 1 de 3). Se ha aplicado una penalización de -${CONFIG.tabPenalties[0].toFixed(1)} puntos.`
+          );
+        } else if (examState.tabSwitches === 2) {
+          examState.tabPenalty = +(examState.tabPenalty + CONFIG.tabPenalties[1]).toFixed(2);
+          updateTopMonitoringBar();
+          saveProgressToStorage();
+          showCustomAlert(
+            "⚠️ Segunda Salida de la Página Detectada",
+            `Has salido nuevamente de la pestaña activa (Salida 2 de 3). Se ha aplicado una penalización adicional de -${CONFIG.tabPenalties[1].toFixed(1)} puntos (Penalización acumulada por pestaña: -1.5). Una tercera salida finalizará automáticamente tu examen.`
+          );
+        } else if (examState.tabSwitches >= 3) {
+          updateTopMonitoringBar();
+          saveProgressToStorage();
+          finalizeEvaluation("Evaluación finalizada por tercera salida de la página");
+        }
+      }
+    });
+
+    /*************************************************************************
+     * BLOQUEO DE COPIAR, PEGAR, CORTAR, ARRASTRAR, MENÚ Y ATAJOS DE TECLADO
+     *************************************************************************/
+    ["copy", "cut", "paste", "dragstart", "drop", "contextmenu"].forEach(evtName => {
+      document.addEventListener(evtName, (e) => {
+        if (examState.active && !examState.finished) {
+          e.preventDefault();
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const key = (e.key || "").toLowerCase();
+      const ctrlOrCmd = e.ctrlKey || e.metaKey;
+
+      if (e.key === "F12") {
+        e.preventDefault();
+        return false;
+      }
+      if (ctrlOrCmd && ["c", "v", "x", "u", "s", "p"].includes(key)) {
+        e.preventDefault();
+        return false;
+      }
+      if (ctrlOrCmd && e.shiftKey && ["i", "j", "c"].includes(key)) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    /*************************************************************************
+     * VALIDACIÓN DE INICIO Y REANUDACIÓN DE SESIÓN (localStorage)
+     *************************************************************************/
+    function checkWelcomeReady() {
+      const rawName = DOM.studentNameInput.value;
+      const nameOk = isFullNameValid(rawName);
+
+      if (nameOk) {
+        DOM.studentNameInput.classList.add("valid");
+        DOM.nameValidationMsg.textContent = "✔ Nombre completo válido.";
+        DOM.nameValidationMsg.classList.add("ok");
+      } else {
+        DOM.studentNameInput.classList.remove("valid");
+        DOM.nameValidationMsg.textContent = "⚠️ Requisito obligatorio: Escribe tu nombre y apellido completos (mínimo 2 palabras).";
+        DOM.nameValidationMsg.classList.remove("ok");
+      }
+
+      if (nameOk && micReady) {
+        DOM.btnStartExam.disabled = false;
+        DOM.startReadinessHint.textContent = "✅ ¡Todo listo! Haz clic en «Iniciar Evaluación en Pantalla Completa».";
+        DOM.startReadinessHint.style.color = "var(--success)";
+      } else if (!nameOk && !micReady) {
+        DOM.btnStartExam.disabled = true;
+        DOM.startReadinessHint.textContent = "Escribe tu nombre completo y autoriza el micrófono para habilitar el inicio.";
+        DOM.startReadinessHint.style.color = "var(--muted)";
+      } else if (!nameOk) {
+        DOM.btnStartExam.disabled = true;
+        DOM.startReadinessHint.textContent = "Falta escribir tu nombre y apellido completos para poder iniciar.";
+        DOM.startReadinessHint.style.color = "var(--warning)";
+      } else {
+        DOM.btnStartExam.disabled = true;
+        DOM.startReadinessHint.textContent = "Falta hacer clic en «Autorizar Micrófono (Medidor dB)» para poder iniciar.";
+        DOM.startReadinessHint.style.color = "var(--warning)";
+      }
+    }
+
+    ["input", "keyup", "change", "blur", "paste"].forEach(evt => {
+      DOM.studentNameInput.addEventListener(evt, () => {
+        setTimeout(checkWelcomeReady, 10);
+      });
+    });
+
+    DOM.btnActivateMic.addEventListener("click", requestAndStartMicrophone);
+    DOM.btnRestoreMic.addEventListener("click", requestAndStartMicrophone);
+    DOM.btnCloseAlert.addEventListener("click", () => {
+      DOM.modalAlert.classList.add("hidden");
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      initBannerDisplay();
+      const saved = loadProgressFromStorage();
+      if (saved && saved.active && !saved.finished) {
+        DOM.resumeBanner.classList.remove("hidden");
+        DOM.studentNameInput.value = saved.studentName || "";
+      }
+      checkWelcomeReady();
+      welcomeCheckInterval = setInterval(() => {
+        if (!examState.active && !examState.finished) {
+          checkWelcomeReady();
+        }
+      }, 300);
+    });
+
+    DOM.btnResumeExam.addEventListener("click", async () => {
+      const saved = loadProgressFromStorage();
+      if (!saved) return;
+      if (!micReady) {
+        const okMic = await requestAndStartMicrophone();
+        if (!okMic) {
+          showCustomAlert(
+            "Micrófono Obligatorio",
+            "Para reanudar la evaluación debes autorizar y mantener activo el micrófono."
+          );
+          return;
+        }
+      }
+      examState = saved;
+      if (welcomeCheckInterval) clearInterval(welcomeCheckInterval);
+      examActivationTimestamp = Date.now();
+      await enterFullscreenSafe();
+      DOM.screenWelcome.classList.add("hidden");
+      DOM.screenExam.classList.remove("hidden");
+      updateTopMonitoringBar();
+      renderCurrentQuestion(true);
+      startMasterClock();
+    });
+
+    DOM.btnStartExam.addEventListener("click", async () => {
+      const fullNameClean = DOM.studentNameInput.value.trim().replace(/\s+/g, " ");
+      if (!isFullNameValid(fullNameClean)) {
+        showCustomAlert(
+          "Nombre Completo Requerido",
+          "Por favor escribe tu nombre y apellido completos antes de comenzar la evaluación."
+        );
+        DOM.studentNameInput.focus();
+        return;
+      }
+
+      if (!micReady) {
+        const ok = await requestAndStartMicrophone();
+        if (!ok) return;
+      }
+
+      if (welcomeCheckInterval) clearInterval(welcomeCheckInterval);
+
+      examState = {
+        active: true,
+        finished: false,
+        studentName: fullNameClean,
+        startTimeISO: new Date().toISOString(),
+        endTimeISO: null,
+        elapsedTotalSeconds: 0,
+        currentIndex: 0,
+        currentQuestionSeconds: 0,
+        closedAnswers: {},
+        openAnswers: {},
+        tabSwitches: 0,
+        tabEvents: [],
+        tabPenalty: 0.0,
+        noiseEvents: [],
+        noisePenalty: 0.0,
+        finishReason: "",
+        verificationCode: "",
+        resultsSummary: null
+      };
+
+      examActivationTimestamp = Date.now();
+      saveProgressToStorage();
+      await enterFullscreenSafe();
+      DOM.screenWelcome.classList.add("hidden");
+      DOM.screenExam.classList.remove("hidden");
+      updateTopMonitoringBar();
+      renderCurrentQuestion(false);
+      startMasterClock();
+    });
+
+    /*************************************************************************
+     * RENDERIZADO DE PREGUNTAS CERRADAS (1-12) Y ABIERTAS (13-15)
+     *************************************************************************/
+    function isClosedPhase() {
+      return examState.currentIndex < CLOSED_QUESTIONS.length;
+    }
+
+    function updateQuestionIllustration(questionId, topicName, pointsVal) {
+      const illus = QUESTION_ILLUSTRATIONS[questionId] || QUESTION_ILLUSTRATIONS[1];
+      DOM.questionVisualTitle.textContent = `🔬 ${illus.title}`;
+      DOM.questionVisualSub.textContent = `${topicName} · Valor: ${pointsVal.toFixed(2)} pts | Prof. Cristian David Ayazo`;
+      DOM.questionVisualSvg.innerHTML = illus.svg;
+    }
+
+    function renderCurrentQuestion(isResuming = false) {
+      if (!isResuming) {
+        examState.currentQuestionSeconds = 0;
+      }
+
+      if (isClosedPhase()) {
+        const q = CLOSED_QUESTIONS[examState.currentIndex];
+        DOM.phaseBadge.textContent = "Parte I: Selección Múltiple (Total: 3.70 pts)";
+        DOM.questionTopicBadge.textContent = q.topic;
+        DOM.questionPointsBadge.textContent = `Valor pregunta: ${q.points.toFixed(2)} pts`;
+        DOM.questionCounter.textContent = `Pregunta ${examState.currentIndex + 1} de ${CLOSED_QUESTIONS.length}`;
+        DOM.questionContext.textContent = q.context;
+        DOM.questionStem.textContent = q.stem;
+        updateQuestionIllustration(q.id, q.topic, q.points);
+
+        DOM.openAnswerContainer.classList.add("hidden");
+        DOM.optionsContainer.classList.remove("hidden");
+        DOM.optionsContainer.innerHTML = "";
+
+        const selectedOpt = examState.closedAnswers[q.id] || null;
+        ["A", "B", "C", "D"].forEach(letter => {
+          const card = document.createElement("div");
+          card.className = "option-card" + (selectedOpt === letter ? " selected" : "");
+          card.innerHTML = `
+            <div class="option-letter">${letter}</div>
+            <div class="option-text">${q.options[letter]}</div>
+          `;
+          card.addEventListener("click", () => {
+            examState.closedAnswers[q.id] = letter;
+            Array.from(DOM.optionsContainer.children).forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            saveProgressToStorage();
+            updateQuestionNavigationState();
+          });
+          DOM.optionsContainer.appendChild(card);
+        });
+
+        DOM.btnNextQuestion.textContent =
+          examState.currentIndex === CLOSED_QUESTIONS.length - 1
+            ? "Pasar a Preguntas Abiertas →"
+            : "Siguiente pregunta →";
+      } else {
+        const openIdx = examState.currentIndex - CLOSED_QUESTIONS.length;
+        const q = OPEN_QUESTIONS[openIdx];
+
+        DOM.phaseBadge.textContent = "Parte II: Preguntas Abiertas (Total: 1.30 pts)";
+        DOM.questionTopicBadge.textContent = q.topic;
+        DOM.questionPointsBadge.textContent = `Valor pregunta: ${q.points.toFixed(2)} pts`;
+        DOM.questionCounter.textContent = `Pregunta Abierta ${openIdx + 1} de ${OPEN_QUESTIONS.length}`;
+        DOM.questionContext.textContent = q.context;
+        DOM.questionStem.textContent = q.stem;
+        updateQuestionIllustration(q.id, q.topic, q.points);
+
+        DOM.optionsContainer.classList.add("hidden");
+        DOM.openAnswerContainer.classList.remove("hidden");
+
+        DOM.openTextarea.value = examState.openAnswers[q.id] || "";
+        updateOpenCountersUI();
+
+        DOM.btnNextQuestion.textContent =
+          openIdx === OPEN_QUESTIONS.length - 1
+            ? "Finalizar y Entregar Evaluación ✔"
+            : "Siguiente pregunta abierta →";
+      }
+
+      updateQuestionTimerUI();
+      updateQuestionNavigationState();
+      saveProgressToStorage();
+    }
+
+    /*************************************************************************
+     * ANÁLISIS DE COHERENCIA Y LÍNEAS SIGNIFICATIVAS EN PREGUNTAS ABIERTAS
+     * Si el estudiante cumple con al menos 4 líneas y coherencia con lo que
+     * se le pregunta, se califica como CORRECTA (100% de sus puntos).
+     *************************************************************************/
+    function normalizeText(str) {
+      return (str || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function analyzeOpenResponse(rawText, questionObj = null) {
+      const text = (rawText || "").trim();
+      if (!text) {
+        return { significantLines: 0, totalWords: 0, isCoherent: false, matchedKeywords: 0 };
+      }
+
+      const allWords = text
+        .split(/\s+/)
+        .filter(w => /[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]{2,}/.test(w));
+
+      const uniqueTotal = new Set(allWords.map(w => normalizeText(w)));
+      const lexicalDiversity = allWords.length > 0 ? uniqueTotal.size / allWords.length : 0;
+
+      // 1. Conteo por renglones explícitos con salto de línea (Enter) y >= 5 palabras coherentes
+      const rawLines = text.split(/\n+/).map(l => l.trim()).filter(Boolean);
+      let explicitValidLines = 0;
+      rawLines.forEach(line => {
+        const lw = line.split(/\s+/).filter(w => /[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]{2,}/.test(w));
+        const uq = new Set(lw.map(w => normalizeText(w)));
+        if (lw.length >= CONFIG.minWordsPerLine && uq.size >= 3) {
+          explicitValidLines += 1;
+        }
+      });
+
+      // 2. Conteo por ideas/oraciones separadas por punto, punto y coma o dos puntos con >= 5 palabras
+      const rawSentences = text.split(/[.!;:\n]+/).map(s => s.trim()).filter(Boolean);
+      let validSentences = 0;
+      rawSentences.forEach(sent => {
+        const sw = sent.split(/\s+/).filter(w => /[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]{2,}/.test(w));
+        const uq = new Set(sw.map(w => normalizeText(w)));
+        if (sw.length >= CONFIG.minWordsPerLine && uq.size >= 3) {
+          validSentences += 1;
+        }
+      });
+
+      // 3. Conteo equivalente por bloques de palabras coherentes (cada 6 palabras con sentido = 1 línea significativa)
+      let wordBlockLines = 0;
+      if (uniqueTotal.size >= 8 && lexicalDiversity >= 0.34) {
+        wordBlockLines = Math.floor(allWords.length / 6);
+      }
+
+      const sigLines = Math.max(explicitValidLines, validSentences, wordBlockLines);
+
+      const norm = normalizeText(text);
+      let matchedKeywords = 0;
+      if (questionObj && Array.isArray(questionObj.keywords)) {
+        questionObj.keywords.forEach(kw => {
+          if (norm.includes(kw)) matchedKeywords++;
+        });
+      }
+
+      const generalCoherenceTerms = [
+        "porque", "debido", "cuando", "son", "tienen", "formado", "contiene", "ejemplo",
+        "diferencia", "sustancia", "mezcla", "carbono", "agua", "sal", "azucar", "fase",
+        "fases", "elemento", "compuesto", "organico", "inorganico", "homogenea", "heterogenea",
+        "quema", "fuego", "separar", "filtracion", "evaporacion", "soluto", "solvente"
+      ];
+      let generalHits = 0;
+      generalCoherenceTerms.forEach(t => {
+        if (norm.includes(t)) generalHits++;
+      });
+
+      const isCoherent =
+        sigLines >= CONFIG.minSignificantLines &&
+        allWords.length >= 20 &&
+        lexicalDiversity >= 0.34 &&
+        (matchedKeywords >= 1 || generalHits >= 2);
+
+      return {
+        significantLines: sigLines,
+        totalWords: allWords.length,
+        isCoherent,
+        matchedKeywords
+      };
+    }
+
+    function updateOpenCountersUI() {
+      if (isClosedPhase()) return;
+      const openIdx = examState.currentIndex - CLOSED_QUESTIONS.length;
+      const q = OPEN_QUESTIONS[openIdx];
+      const val = DOM.openTextarea.value;
+      examState.openAnswers[q.id] = val;
+
+      const stats = analyzeOpenResponse(val, q);
+      DOM.sigLinesCount.textContent = `Líneas significativas: ${stats.significantLines} / ${CONFIG.minSignificantLines}`;
+      DOM.wordsCount.textContent = `Palabras totales: ${stats.totalWords}`;
+
+      if (stats.significantLines >= CONFIG.minSignificantLines) {
+        DOM.sigLinesCount.classList.add("ok");
+      } else {
+        DOM.sigLinesCount.classList.remove("ok");
+      }
+
+      if (stats.isCoherent) {
+        DOM.coherenceBadge.textContent = `Estado: ✔ CORRECTA (+${q.points.toFixed(2)} pts)`;
+        DOM.coherenceBadge.classList.add("ok");
+        DOM.openValidationMsg.textContent = `✔ Cumples las 4+ líneas coherentes con la pregunta. Calificada como CORRECTA (${q.points.toFixed(2)} pts).`;
+        DOM.openValidationMsg.style.color = "var(--success)";
+      } else if (stats.significantLines >= CONFIG.minSignificantLines) {
+        DOM.coherenceBadge.textContent = "Coherencia: Incluye conceptos de la pregunta";
+        DOM.coherenceBadge.classList.remove("ok");
+        DOM.openValidationMsg.textContent = "Líneas completadas. Asegúrate de responder coherentemente a lo que se pregunta.";
+        DOM.openValidationMsg.style.color = "var(--warning)";
+      } else {
+        DOM.coherenceBadge.textContent = "Coherencia temática: En redacción...";
+        DOM.coherenceBadge.classList.remove("ok");
+        DOM.openValidationMsg.textContent = `Completa al menos ${CONFIG.minSignificantLines} líneas significativas coherentes con la pregunta.`;
+        DOM.openValidationMsg.style.color = "var(--warning)";
+      }
+    }
+
+    DOM.openTextarea.addEventListener("input", () => {
+      updateOpenCountersUI();
+      updateQuestionNavigationState();
+      saveProgressToStorage();
+    });
+
+    /*************************************************************************
+     * CONTROL DE TIEMPOS Y AVANCE DE PREGUNTAS
+     *************************************************************************/
+    function updateQuestionTimerUI() {
+      if (isClosedPhase()) {
+        const remainingMin = Math.max(0, CONFIG.minClosedTimeSeconds - examState.currentQuestionSeconds);
+        DOM.questionTimerLabel.textContent = "⏳ Tiempo mínimo en pregunta:";
+        DOM.questionTimerDisplay.textContent = formatSecondsMMSS(remainingMin);
+      } else {
+        const remainingOpen = Math.max(0, CONFIG.maxOpenTimeSeconds - examState.currentQuestionSeconds);
+        DOM.questionTimerLabel.textContent = "⏰ Tiempo restante pregunta abierta:";
+        DOM.questionTimerDisplay.textContent = formatSecondsMMSS(remainingOpen);
+      }
+    }
+
+    function updateQuestionNavigationState() {
+      if (isClosedPhase()) {
+        const q = CLOSED_QUESTIONS[examState.currentIndex];
+        const hasSelected = Boolean(examState.closedAnswers[q.id]);
+        const timeCompleted = examState.currentQuestionSeconds >= CONFIG.minClosedTimeSeconds;
+
+        if (!timeCompleted) {
+          DOM.minTimeWarning.textContent = "Debes completar el tiempo mínimo antes de continuar";
+          DOM.minTimeWarning.classList.remove("ready");
+        } else if (!hasSelected) {
+          DOM.minTimeWarning.textContent = "Selecciona una respuesta (A, B, C o D) para continuar";
+          DOM.minTimeWarning.classList.remove("ready");
+        } else {
+          DOM.minTimeWarning.textContent = "✔ Tiempo mínimo y selección completados. Puedes continuar.";
+          DOM.minTimeWarning.classList.add("ready");
+        }
+
+        DOM.btnNextQuestion.disabled = !(hasSelected && timeCompleted);
+      } else {
+        const openIdx = examState.currentIndex - CLOSED_QUESTIONS.length;
+        const q = OPEN_QUESTIONS[openIdx];
+        const stats = analyzeOpenResponse(DOM.openTextarea.value, q);
+        const linesOk = stats.significantLines >= CONFIG.minSignificantLines;
+
+        if (!linesOk) {
+          DOM.minTimeWarning.textContent = `Debes redactar mínimo ${CONFIG.minSignificantLines} líneas significativas antes de continuar`;
+          DOM.minTimeWarning.classList.remove("ready");
+        } else {
+          DOM.minTimeWarning.textContent = "✔ Mínimo de líneas significativas cumplido. Puedes continuar.";
+          DOM.minTimeWarning.classList.add("ready");
+        }
+        DOM.btnNextQuestion.disabled = !linesOk;
+      }
+    }
+
+    function syncActiveOpenTextarea() {
+      if (!isClosedPhase() && examState.currentIndex >= CLOSED_QUESTIONS.length) {
+        const openIdx = examState.currentIndex - CLOSED_QUESTIONS.length;
+        const q = OPEN_QUESTIONS[openIdx];
+        if (q && DOM.openTextarea) {
+          examState.openAnswers[q.id] = DOM.openTextarea.value;
+        }
+      }
+    }
+
+    function advanceToNextQuestion(autoByTimeout = false) {
+      syncActiveOpenTextarea();
+
+      const totalQuestionsCount = CLOSED_QUESTIONS.length + OPEN_QUESTIONS.length;
+      if (examState.currentIndex < totalQuestionsCount - 1) {
+        examState.currentIndex += 1;
+        examState.currentQuestionSeconds = 0;
+        renderCurrentQuestion(false);
+        if (autoByTimeout) {
+          showCustomAlert(
+            "⏰ Tiempo de Pregunta Abierta Finalizado",
+            "El tiempo máximo de 5 minutos para esta pregunta abierta terminó. Se guardó automáticamente tu respuesta y se avanzó a la siguiente pregunta."
+          );
+        }
+      } else {
+        if (autoByTimeout) {
+          finalizeEvaluation("Evaluación completada (tiempo agotado en la última pregunta abierta)");
+        } else {
+          finalizeEvaluation("Evaluación completada normalmente por el estudiante");
+        }
+      }
+    }
+
+    DOM.btnNextQuestion.addEventListener("click", () => {
+      advanceToNextQuestion(false);
+    });
+
+    function startMasterClock() {
+      if (mainInterval) clearInterval(mainInterval);
+      mainInterval = setInterval(() => {
+        if (!examState.active || examState.finished) return;
+
+        examState.elapsedTotalSeconds += 1;
+        examState.currentQuestionSeconds += 1;
+
+        updateTopMonitoringBar();
+        updateQuestionTimerUI();
+        updateQuestionNavigationState();
+        saveProgressToStorage();
+
+        if (examState.elapsedTotalSeconds >= CONFIG.totalTimeSeconds) {
+          syncActiveOpenTextarea();
+          finalizeEvaluation("Tiempo total de la evaluación agotado (45 minutos)");
+          return;
+        }
+
+        if (!isClosedPhase() && examState.currentQuestionSeconds >= CONFIG.maxOpenTimeSeconds) {
+          advanceToNextQuestion(true);
+        }
+      }, 1000);
+    }
+
+    /*************************************************************************
+     * BOTÓN DE USO EXCLUSIVO DEL DOCENTE (PROF. CRISTIAN DAVID AYAZO)
+     *************************************************************************/
+    DOM.btnTeacherFinish.addEventListener("click", () => {
+      if (examState.finished) return;
+      DOM.teacherPasswordInput.value = "";
+      DOM.teacherErrorMsg.classList.add("hidden");
+      DOM.modalTeacher.classList.remove("hidden");
+      DOM.teacherPasswordInput.focus();
+    });
+
+    DOM.btnCancelTeacher.addEventListener("click", () => {
+      DOM.modalTeacher.classList.add("hidden");
+    });
+
+    DOM.btnConfirmTeacher.addEventListener("click", () => {
+      const entered = DOM.teacherPasswordInput.value.trim();
+      if (entered !== CONFIG.teacherPassword) {
+        DOM.teacherErrorMsg.textContent = "Contraseña incorrecta";
+        DOM.teacherErrorMsg.classList.remove("hidden");
+        return;
+      }
+
+      DOM.modalTeacher.classList.add("hidden");
+      if (!examState.studentName) {
+        examState.studentName = DOM.studentNameInput.value.trim() || "Estudiante (Finalizado por docente)";
+      }
+      if (!examState.startTimeISO) {
+        examState.startTimeISO = new Date().toISOString();
+      }
+      syncActiveOpenTextarea();
+      finalizeEvaluation("Evaluación finalizada por el docente");
+    });
+
+    /*************************************************************************
+     * CALIFICACIÓN ACADÉMICA:
+     * - 12 Preguntas Cerradas = 3.70 puntos (0.31 pts Q1..Q10, 0.30 pts Q11..Q12)
+     * - 3 Preguntas Abiertas = 1.30 puntos (0.43 + 0.43 + 0.44)
+     * - Si el estudiante escribe >= 4 líneas coherentes con lo preguntado,
+     *   la pregunta abierta es CORRECTA y obtiene el 100% de su valor.
+     *************************************************************************/
+    function gradeOpenQuestion(q, rawAnswer) {
+      const text = (rawAnswer || "").trim();
+      if (!text) {
+        return {
+          earnedPoints: 0.0,
+          sigLines: 0,
+          words: 0,
+          matchedKeywords: 0,
+          statusLabel: "INCORRECTA (Sin respuesta)",
+          isValidatedCorrect: false
+        };
+      }
+
+      const stats = analyzeOpenResponse(text, q);
+
+      if (stats.isCoherent) {
+        return {
+          earnedPoints: q.points,
+          sigLines: stats.significantLines,
+          words: stats.totalWords,
+          matchedKeywords: stats.matchedKeywords,
+          statusLabel: "CORRECTA (4+ líneas coherentes)",
+          isValidatedCorrect: true
+        };
+      }
+
+      return {
+        earnedPoints: 0.0,
+        sigLines: stats.significantLines,
+        words: stats.totalWords,
+        matchedKeywords: stats.matchedKeywords,
+        statusLabel: stats.significantLines < CONFIG.minSignificantLines
+          ? `INCORRECTA (Menos de 4 líneas: ${stats.significantLines}/4)`
+          : "INCORRECTA (Sin coherencia con la pregunta)",
+        isValidatedCorrect: false
+      };
+    }
+
+    function computeEvaluationResults() {
+      let correctCount = 0;
+      let closedScoreSum = 0;
+
+      const closedDetails = CLOSED_QUESTIONS.map(q => {
+        const chosen = examState.closedAnswers[q.id] || "Sin responder";
+        const isCorrect = chosen === q.correct;
+        const earned = isCorrect ? q.points : 0.0;
+        if (isCorrect) {
+          correctCount++;
+          closedScoreSum += q.points;
+        }
+        return {
+          id: q.id,
+          topic: q.topic,
+          chosen,
+          correct: q.correct,
+          isCorrect,
+          points: q.points,
+          earnedPoints: +earned.toFixed(2)
+        };
+      });
+
+      const closedScore = +closedScoreSum.toFixed(2);
+
+      let openScoreSum = 0;
+      let validatedOpenCount = 0;
+
+      const openDetails = OPEN_QUESTIONS.map((q, idx) => {
+        const ans = examState.openAnswers[q.id] || "";
+        const rubric = gradeOpenQuestion(q, ans);
+        if (rubric.isValidatedCorrect) validatedOpenCount++;
+        openScoreSum += rubric.earnedPoints;
+        return {
+          number: idx + 1,
+          id: q.id,
+          topic: q.topic,
+          stem: q.stem,
+          answer: ans,
+          sigLines: rubric.sigLines,
+          words: rubric.words,
+          matchedKeywords: rubric.matchedKeywords,
+          statusLabel: rubric.statusLabel,
+          isValidatedCorrect: rubric.isValidatedCorrect,
+          score: +rubric.earnedPoints.toFixed(2),
+          maxScore: +q.points.toFixed(2)
+        };
+      });
+
+      const openScore = +Math.min(CONFIG.openWeight, openScoreSum).toFixed(2);
+      const academicScore = +(closedScore + openScore).toFixed(2);
+      const totalPenalties = +(examState.tabPenalty + examState.noisePenalty).toFixed(2);
+
+      const rawFinal = academicScore - totalPenalties;
+      const finalGrade = +Math.min(CONFIG.scaleMax, Math.max(CONFIG.scaleMin, rawFinal)).toFixed(2);
+      const passed = finalGrade >= CONFIG.passingGrade;
+
+      return {
+        correctCount,
+        validatedOpenCount,
+        closedScore,
+        openScore,
+        academicScore,
+        tabPenalty: +examState.tabPenalty.toFixed(2),
+        noisePenalty: +examState.noisePenalty.toFixed(2),
+        totalPenalties,
+        finalGrade,
+        passed,
+        closedDetails,
+        openDetails
+      };
+    }
+
+    /*************************************************************************
+     * GENERACIÓN DE HASH Y CÓDIGO QR ESCANEABLE CON EL INFORME COMPLETO
+     *************************************************************************/
+    function generateVerificationHash(name, grade, isoEnd) {
+      const base = `${name}|${grade}|${isoEnd}|GCFL-QUIMICA-G6-CDA`;
+      let h1 = 0x811c9dc5;
+      for (let i = 0; i < base.length; i++) {
+        h1 ^= base.charCodeAt(i);
+        h1 = Math.imul(h1, 0x01000193);
+      }
+      const hex = (h1 >>> 0).toString(16).toUpperCase().padStart(8, "0");
+      const tail = Math.abs(base.length * 97 + Math.round(grade * 100)).toString(36).toUpperCase();
+      return `GCFL6-${hex}-${tail}`;
+    }
+
+    function toCleanAsciiForQR(str) {
+      return (str || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\x20-\x7E\n]/g, "");
+    }
+
+    function drawFallbackMatrixQR(ctx, text, offsetX, offsetY, boxSize) {
+      const cells = 29;
+      const cellSize = boxSize / cells;
+      ctx.fillStyle = "#000000";
+
+      function drawFinder(r0, c0) {
+        for (let r = 0; r < 7; r++) {
+          for (let c = 0; c < 7; c++) {
+            if (r === 0 || r === 6 || c === 0 || c === 6 || (r >= 2 && r <= 4 && c >= 2 && c <= 4)) {
+              ctx.fillRect(offsetX + (c0 + c) * cellSize, offsetY + (r0 + r) * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      }
+      drawFinder(0, 0);
+      drawFinder(0, cells - 7);
+      drawFinder(cells - 7, 0);
+
+      let seed = 2166136261;
+      for (let i = 0; i < text.length; i++) {
+        seed ^= text.charCodeAt(i);
+        seed = Math.imul(seed, 16777619);
+      }
+      for (let r = 0; r < cells; r++) {
+        for (let c = 0; c < cells; c++) {
+          const inFinder =
+            (r < 8 && c < 8) ||
+            (r < 8 && c >= cells - 8) ||
+            (r >= cells - 8 && c < 8);
+          if (inFinder) continue;
+          seed ^= (r * 31 + c * 17);
+          seed = Math.imul(seed, 16777619);
+          if ((seed >>> 0) % 2 === 0) {
+            ctx.fillRect(offsetX + c * cellSize, offsetY + r * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+
+    async function buildWhiteBackgroundQrJpeg(qrText) {
+      const cleanText = toCleanAsciiForQR(qrText);
+      const outCanvas = document.createElement("canvas");
+      outCanvas.width = 480;
+      outCanvas.height = 480;
+      const ctx = outCanvas.getContext("2d");
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+      if (typeof window.QRious === "function") {
+        try {
+          const tempCanvas = document.createElement("canvas");
+          new window.QRious({
+            element: tempCanvas,
+            value: cleanText,
+            size: 440,
+            level: "L",
+            background: "#ffffff",
+            foreground: "#000000"
+          });
+          if (tempCanvas.width > 0) {
+            ctx.drawImage(tempCanvas, 20, 20, 440, 440);
+            return outCanvas.toDataURL("image/jpeg", 0.98);
+          }
+        } catch (err) {
+          console.warn("QRious falló, usando QRCode.js:", err);
+        }
+      }
+
+      DOM.qrTempHolder.innerHTML = "";
+      if (typeof window.QRCode === "function") {
+        try {
+          new window.QRCode(DOM.qrTempHolder, {
+            text: cleanText,
+            width: 420,
+            height: 420,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: window.QRCode.CorrectLevel.L
+          });
+        } catch (e) {
+          console.warn("Error en QRCode.js:", e);
+        }
+      }
+
+      await new Promise(r => setTimeout(r, 140));
+
+      const qrCanvas = DOM.qrTempHolder.querySelector("canvas");
+      const qrImg = DOM.qrTempHolder.querySelector("img");
+
+      if (qrCanvas && qrCanvas.width > 0) {
+        ctx.drawImage(qrCanvas, 30, 30, 420, 420);
+      } else if (qrImg && qrImg.complete && qrImg.naturalWidth > 0) {
+        ctx.drawImage(qrImg, 30, 30, 420, 420);
+      } else {
+        drawFallbackMatrixQR(ctx, cleanText, 30, 30, 420);
+      }
+
+      return outCanvas.toDataURL("image/jpeg", 0.98);
+    }
+
+    /*************************************************************************
+     * FINALIZACIÓN DE LA EVALUACIÓN, PANTALLA DE RESULTADOS Y PDF CIFRADO
+     *************************************************************************/
+    async function finalizeEvaluation(reason) {
+      if (examState.finished) return;
+
+      syncActiveOpenTextarea();
+
+      examState.active = false;
+      examState.finished = true;
+      examState.finishReason = reason;
+      examState.endTimeISO = new Date().toISOString();
+
+      if (mainInterval) clearInterval(mainInterval);
+      if (welcomeCheckInterval) clearInterval(welcomeCheckInterval);
+      if (audioMonitorFrame) cancelAnimationFrame(audioMonitorFrame);
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+      }
+
+      isInternalTransition = true;
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
+
+      DOM.modalFullscreen.classList.add("hidden");
+      DOM.modalMicLost.classList.add("hidden");
+      DOM.modalAlert.classList.add("hidden");
+
+      const summary = computeEvaluationResults();
+      examState.resultsSummary = summary;
+      examState.verificationCode = generateVerificationHash(
+        examState.studentName,
+        summary.finalGrade,
+        examState.endTimeISO
+      );
+
+      saveProgressToStorage();
+      try {
+        localStorage.removeItem(CONFIG.storageKey);
+      } catch (e) {}
+
+      DOM.screenWelcome.classList.add("hidden");
+      DOM.screenExam.classList.add("hidden");
+      DOM.screenResults.classList.remove("hidden");
+
+      DOM.resStudentName.textContent = examState.studentName;
+      DOM.resFinishReason.textContent = examState.finishReason;
+      DOM.resCorrectCount.textContent = `${summary.correctCount} / ${CLOSED_QUESTIONS.length}`;
+      DOM.resClosedScore.textContent = `${summary.closedScore.toFixed(2)} / ${CONFIG.closedWeight.toFixed(2)}`;
+      DOM.resOpenScore.textContent = `${summary.openScore.toFixed(2)} / ${CONFIG.openWeight.toFixed(2)}`;
+      DOM.resTabPenalty.textContent = `-${summary.tabPenalty.toFixed(2)}`;
+      DOM.resNoisePenalty.textContent = `-${summary.noisePenalty.toFixed(2)}`;
+      DOM.resFinalGrade.textContent = summary.finalGrade.toFixed(2);
+      DOM.verificationCodeText.textContent = examState.verificationCode;
+
+      const endDateStr = new Date(examState.endTimeISO).toLocaleString("es-CO");
+      qrReportTextGlobal = [
+        "INFORME EVALUACION QUIMICA 6",
+        `COL: ${CONFIG.institution}`,
+        `DOCENTE: ${CONFIG.teacherName}`,
+        `ESTUDIANTE: ${examState.studentName}`,
+        `CERRADAS: ${summary.correctCount}/12 (${summary.closedScore.toFixed(2)}/3.70)`,
+        `ABIERTAS: ${summary.validatedOpenCount}/3 (${summary.openScore.toFixed(2)}/1.30)`,
+        `PENALIZACION: -${summary.totalPenalties.toFixed(2)}`,
+        `NOTA ESTUDIANTE: ${summary.finalGrade.toFixed(2)} / 5.00 (${summary.passed ? "APROBADO" : "NO APROBADO"})`,
+        `FECHA: ${endDateStr}`,
+        `HASH: ${examState.verificationCode}`
+      ].join("\n");
+
+      DOM.qrReportPreviewBox.textContent = qrReportTextGlobal;
+
+      qrJpegDataUrlGlobal = await buildWhiteBackgroundQrJpeg(qrReportTextGlobal);
+      DOM.qrDisplayImg.src = qrJpegDataUrlGlobal;
+
+      generateAndDownloadEncryptedPDF();
+    }
+
+    function sanitizeFileName(str) {
+      return (str || "ESTUDIANTE")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9_-]/g, "_")
+        .replace(/_+/g, "_")
+        .toUpperCase();
+    }
+
+    function generateAndDownloadEncryptedPDF() {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        showCustomAlert(
+          "Error de Librería PDF",
+          "No se pudo cargar la librería jsPDF desde el CDN. Verifica tu conexión a internet e intenta nuevamente."
+        );
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      let doc;
+
+      try {
+        doc = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+          encryption: {
+            userPassword: CONFIG.pdfPassword,
+            ownerPassword: CONFIG.pdfPassword,
+            userPermissions: ["print", "modify", "copy", "annot-forms"]
+          }
+        });
+      } catch (err) {
+        doc = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4"
+        });
+      }
+
+      const s = examState.resultsSummary;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 14;
+      let y = 8;
+
+      function checkPageBreak(neededHeight) {
+        if (y + neededHeight > pageHeight - 15) {
+          doc.addPage();
+          y = 16;
+        }
+      }
+
+      // 1. BANNER INSTITUCIONAL EN LA PARTE SUPERIOR DEL PDF GENERADO
+      if (!bannerForPdfJpeg) {
+        bannerForPdfJpeg = renderOfficialBannerCanvas();
+      }
+      try {
+        doc.setDrawColor(200, 157, 40);
+        doc.setLineWidth(0.6);
+        doc.rect(margin - 0.5, y - 0.5, pageWidth - (margin - 0.5) * 2, 33, "S");
+        doc.addImage(bannerForPdfJpeg, "JPEG", margin, y, pageWidth - margin * 2, 32);
+        y += 35;
+      } catch (bannerErr) {
+        console.warn("No se pudo incrustar imagen de banner:", bannerErr);
+      }
+
+      // Cinta institucional con el nombre del Profesor Cristian David Ayazo
+      doc.setFillColor(8, 27, 56);
+      doc.rect(margin, y, pageWidth - margin * 2, 13, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.6);
+      doc.text(
+        `${CONFIG.institution}  |  Área: ${CONFIG.subjectDisplay}  |  Grado: ${CONFIG.grade}°  |  Docente: ${CONFIG.teacherName}`,
+        margin + 3,
+        y + 5
+      );
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.4);
+      doc.setTextColor(254, 240, 138);
+      doc.text(
+        `Examen: ${CONFIG.examName} (${CONFIG.examTopics})`,
+        margin + 3,
+        y + 10
+      );
+
+      y += 17;
+
+      // 2. INFORMACIÓN DEL ESTUDIANTE Y DEL DOCENTE
+      doc.setTextColor(8, 27, 56);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("1. INFORMACIÓN DEL ESTUDIANTE Y APLICACIÓN", margin, y);
+      y += 4;
+
+      doc.setDrawColor(203, 213, 225);
+      doc.setFillColor(248, 250, 252);
+      doc.rect(margin, y, pageWidth - margin * 2, 21, "FD");
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(8.6);
+      const startDateObj = examState.startTimeISO ? new Date(examState.startTimeISO) : new Date();
+      const endDateObj = examState.endTimeISO ? new Date(examState.endTimeISO) : new Date();
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Estudiante:", margin + 3, y + 6.5);
+      doc.setFont("helvetica", "normal");
+      doc.text(String(examState.studentName), margin + 23, y + 6.5);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Profesor de Química:", margin + 108, y + 6.5);
+      doc.setFont("helvetica", "normal");
+      doc.text(CONFIG.teacherName, margin + 143, y + 6.5);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Fecha:", margin + 3, y + 13);
+      doc.setFont("helvetica", "normal");
+      doc.text(endDateObj.toLocaleDateString("es-CO"), margin + 21, y + 13);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Hora de inicio:", margin + 60, y + 13);
+      doc.setFont("helvetica", "normal");
+      doc.text(startDateObj.toLocaleTimeString("es-CO"), margin + 85, y + 13);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Hora finalización:", margin + 122, y + 13);
+      doc.setFont("helvetica", "normal");
+      doc.text(endDateObj.toLocaleTimeString("es-CO"), margin + 152, y + 13);
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Tiempo empleado:", margin + 3, y + 19);
+      doc.setFont("helvetica", "normal");
+      doc.text(formatSecondsMMSS(examState.elapsedTotalSeconds) + " min", margin + 34, y + 19);
+
+      y += 26;
+
+      // 3. RESULTADOS ACADÉMICOS, NOTA DEL ESTUDIANTE Y CÓDIGO QR DE VERIFICACIÓN
+      doc.setTextColor(8, 27, 56);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("2. CALIFICACIÓN DEL ESTUDIANTE, INTEGRIDAD Y CÓDIGO QR", margin, y);
+      y += 4;
+
+      const boxHeight = 60;
+      doc.setDrawColor(203, 213, 225);
+      doc.setFillColor(255, 255, 255);
+      doc.rect(margin, y, pageWidth - margin * 2, boxHeight, "FD");
+
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(8.6);
+      let ry = y + 6.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("• Correctas Selección Múltiple:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${s.correctCount} de ${CLOSED_QUESTIONS.length} preguntas`, margin + 55, ry);
+
+      ry += 5.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("• Puntaje Preguntas Cerradas:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${s.closedScore.toFixed(2)} / 3.70 pts (10 preguntas de 0.31 pts + 2 preguntas de 0.30 pts)`, margin + 55, ry);
+
+      ry += 5.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("• Puntaje Preguntas Abiertas:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${s.openScore.toFixed(2)} / 1.30 pts (${s.validatedOpenCount} de 3 correctas por coherencia y >= 4 líneas)`, margin + 55, ry);
+
+      ry += 5.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("• Puntaje Académico Bruto:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${s.academicScore.toFixed(2)} / 5.00 pts`, margin + 55, ry);
+
+      ry += 5.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("• Penalizaciones aplicadas:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(
+        `Pestaña: -${s.tabPenalty.toFixed(2)} (${examState.tabSwitches} salidas) | Ruido (>70 dB): -${s.noisePenalty.toFixed(2)} (${examState.noiseEvents.length} alertas)`,
+        margin + 55,
+        ry
+      );
+
+      // Recuadro destacado con la NOTA QUE OBTIENE EL ESTUDIANTE
+      ry += 3.5;
+      doc.setFillColor(8, 27, 56);
+      doc.setDrawColor(200, 157, 40);
+      doc.rect(margin + 3, ry, 126, 10, "FD");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(254, 240, 138);
+      doc.text(
+        `NOTA OBTENIDA POR EL ESTUDIANTE:  ${s.finalGrade.toFixed(2)} / 5.00  (${s.passed ? "APROBADO" : "NO APROBADO"})`,
+        margin + 6,
+        ry + 6.6
+      );
+
+      ry += 14.5;
+      doc.setFontSize(8.0);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont("helvetica", "bold");
+      doc.text("Motivo de finalización:", margin + 3, ry);
+      doc.setFont("helvetica", "normal");
+      doc.text(String(examState.finishReason), margin + 37, ry);
+
+      ry += 4.5;
+      doc.setFont("helvetica", "bold");
+      doc.text("Código QR de verificación:", margin + 3, ry);
+      doc.setFont("courier", "bold");
+      doc.text(String(examState.verificationCode), margin + 44, ry);
+
+      ry += 4.2;
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(6.9);
+      doc.setTextColor(100, 116, 139);
+      doc.text(
+        "Nota: El nivel en dB se calcula sobre la amplitud relativa del micrófono y no corresponde a decibeles calibrados.",
+        margin + 3,
+        ry
+      );
+
+      if (qrJpegDataUrlGlobal) {
+        try {
+          doc.addImage(qrJpegDataUrlGlobal, "JPEG", pageWidth - margin - 46, y + 5, 43, 43);
+        } catch (qrErr) {
+          console.warn("Error al insertar imagen QR en PDF:", qrErr);
+        }
+      }
+
+      y += boxHeight + 6;
+
+      // 4. DETALLE DE RESPUESTAS DE SELECCIÓN MÚLTIPLE CON VALOR POR PREGUNTA
+      checkPageBreak(45);
+      doc.setTextColor(8, 27, 56);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("3. RESPUESTAS DE SELECCIÓN MÚLTIPLE (12 PREGUNTAS — SUMATORIA: 3.70 PTS)", margin, y);
+      y += 5;
+
+      doc.setFontSize(8.0);
+      s.closedDetails.forEach((item, index) => {
+        checkPageBreak(6.8);
+        doc.setFillColor(index % 2 === 0 ? 248 : 255, index % 2 === 0 ? 250 : 255, index % 2 === 0 ? 252 : 255);
+        doc.rect(margin, y - 3.8, pageWidth - margin * 2, 6, "F");
+
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(30, 41, 59);
+        doc.text(`P${item.id} (${item.topic}):`, margin + 2, y);
+
+        doc.setFont("helvetica", "normal");
+        doc.text(
+          `Marcada: ${item.chosen}  |  Clave: ${item.correct}  |  Puntaje: ${item.earnedPoints.toFixed(2)} / ${item.points.toFixed(2)} pts`,
+          margin + 68,
+          y
+        );
+
+        doc.setFont("helvetica", "bold");
+        if (item.isCorrect) {
+          doc.setTextColor(21, 128, 61);
+          doc.text("CORRECTA", pageWidth - margin - 22, y);
+        } else {
+          doc.setTextColor(185, 28, 28);
+          doc.text("INCORRECTA", pageWidth - margin - 22, y);
+        }
+        y += 6;
+      });
+
+      y += 4;
+
+      // 5. RESPUESTAS ABIERTAS COMPLETAS Y VALIDACIÓN DE COHERENCIA (SUMATORIA: 1.30 PTS)
+      checkPageBreak(28);
+      doc.setTextColor(8, 27, 56);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("4. RESPUESTAS ABIERTAS COMPLETAS (3 PREGUNTAS — SUMATORIA: 1.30 PTS)", margin, y);
+      y += 5.5;
+
+      s.openDetails.forEach((op) => {
+        checkPageBreak(24);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(8.6);
+        doc.setTextColor(8, 27, 56);
+        doc.text(
+          `Abierta ${op.number} (${op.topic}) — Puntaje obtenido: ${op.score.toFixed(2)} / ${op.maxScore.toFixed(2)} pts | ${op.statusLabel}`,
+          margin,
+          y
+        );
+        y += 4.5;
+
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(7.6);
+        doc.setTextColor(71, 85, 105);
+        doc.text(`Extensión registrada: ${op.sigLines} líneas significativas, ${op.words} palabras totales.`, margin, y);
+        y += 4.5;
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.1);
+        doc.setTextColor(30, 41, 59);
+        const answerText = op.answer && op.answer.trim().length > 0
+          ? op.answer.trim()
+          : "[Sin respuesta registrada por el estudiante]";
+        const wrappedLines = doc.splitTextToSize(answerText, pageWidth - margin * 2 - 4);
+
+        wrappedLines.forEach(lineStr => {
+          checkPageBreak(5.2);
+          doc.text(lineStr, margin + 2, y);
+          y += 4.5;
+        });
+
+        y += 3.5;
+      });
+
+      const cleanStudent = sanitizeFileName(examState.studentName);
+      const fileName = `Informe_${CONFIG.subject}_${CONFIG.grade}_${cleanStudent}.pdf`;
+      doc.save(fileName);
+    }
+
+    DOM.btnDownloadPdf.addEventListener("click", () => {
+      generateAndDownloadEncryptedPDF();
+    });
+  </script>
+</body>
+</html>
